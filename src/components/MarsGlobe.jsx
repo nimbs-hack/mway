@@ -1097,9 +1097,9 @@ export default function MarsGlobe({ site, onSite, onStatus, onImagerySource, onS
     }).filter(Boolean)
     const route = profile.status === 'ready'
       ? profile.samples.map((s) => ({ point: s.point, level: slopeLevel(s.slope, limits.slope) }))
-      : null
-    planOverlay.current?.set(vertices, route)
-  }, [viewer, plan, profile, limits.slope])
+      : routePath?.map((point) => ({ point, level: 'unknown' })) ?? null
+    planOverlay.current?.set(vertices, route, profile.status !== 'ready')
+  }, [viewer, plan, routePath, profile, limits.slope])
 
   const startAt = (point, startName = null) => {
     const far = plan.target && distance(plan.target, point) > NEW_PLAN_DISTANCE

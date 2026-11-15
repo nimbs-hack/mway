@@ -13,7 +13,6 @@ import {
   ImageryLayer,
   ImageryProvider,
   Math as CesiumMath,
-  PolylineDashMaterialProperty,
   ScreenSpaceEventHandler,
   ScreenSpaceEventType,
   UrlTemplateImageryProvider,
@@ -24,6 +23,7 @@ import type { Site } from '../api'
 import NavControls from '../components/NavControls.jsx'
 import MapLabels, { type MapLabel } from '../components/MapLabels'
 import { pickGround, setupControls } from '../components/camera.js'
+import { addPlanOverlay } from '../components/plan-overlay'
 import { LOCAL_MAX_ZOOM, MAX_NATIVE_ZOOM, localTilePath, proxyTileUrl } from '../data/basemap.js'
 import { addCtxLayer } from '../data/ctx-layer.ts'
 import { DATUM_OFFSET, MARS_SPHERE, createTerrain } from '../data/terrain.js'
@@ -358,29 +358,21 @@ export function GlobeCanvas({
     }
   }, [viewer, sites, selected])
 
-  // The route on the ground: solid in the accent when assessed, as the
-  // Sites page draws the plan, dashed while it is only the stops in order.
-  // A dark halo under it keeps it visible on ground of its own colour.
+  // Share the Sites overlay. Cesium's ground-clamped lines use Earth's
+  // approximate terrain heights and break into fragments on Mars.
   useEffect(() => {
     if (!viewer || !route || route.points.length < 2) return
-    const positions = route.points.map(([lat, lon]) => Cartesian3.fromDegrees(lon, lat, 0, MARS_SPHERE))
-    const accent = cssColor('--color-accent')
-    const halo = viewer.entities.add({ polyline: { positions, width: 6.5, clampToGround: true, zIndex: 0, material: cssColor('--color-bg') } })
-    const line = viewer.entities.add({
-      polyline: {
-        positions,
-        width: 3.5,
-        clampToGround: true,
-        zIndex: 1,
-        material: route.assessed ? accent : new PolylineDashMaterialProperty({ color: accent, dashLength: 16 }),
-      },
+    const overlay = addPlanOverlay(viewer, {
+      text: cssColor('--color-text').toCssColorString(),
+      bg: cssColor('--color-bg').toCssColorString(),
+      surface: cssColor('--color-surface').toCssColorString(),
+      dim: cssColor('--color-text-dim').toCssColorString(),
+      hazard: cssColor('--color-hazard').toCssColorString(),
+      accent: cssColor('--color-accent').toCssColorString(),
+      ok: cssColor('--color-ok').toCssColorString(),
     })
-    viewer.scene.requestRender()
-    return () => {
-      if (viewer.isDestroyed()) return
-      viewer.entities.remove(halo)
-      viewer.entities.remove(line)
-    }
+    overlay.set([], route.points.map((point) => ({ point, level: 'unknown' })), !route.assessed)
+    return () => overlay.destroy()
   }, [viewer, route])
 
   // Bring a site picked in the list into view. Keyed on which site is

@@ -36,7 +36,7 @@ const LABEL_FONT = '600 12px Inter, system-ui, sans-serif'
 
 /**
  * Draws the EVA plan over the map on a 2D canvas, like route-overlay.ts:
- * the sampled route colored by slope level, or straight dashed legs until
+ * the sampled route colored by slope level, or the full path dashed until
  * samples arrive, plus start, waypoint and target handles. Coordinates are
  * planetocentric latitude and east longitude, -180 to 180.
  */
@@ -52,6 +52,7 @@ export function addPlanOverlay(viewer: Viewer, colors: PlanColors) {
   const clipper = segmentClipper(scene, occluder)
   let vertices: (PlanVertex & Projected)[] = []
   let route: (RoutePoint & Projected)[] = []
+  let pending = false
   // `along` is each point's ground distance from the route's start, which
   // anchors the dashes to the terrain. `pieces` is what the last frame drew.
   let alternatives: (Omit<Alternative, 'points'> & { points: ({ point: LatLon } & Projected)[], along: number[], pieces: Piece[] })[] = []
@@ -108,7 +109,10 @@ export function addPlanOverlay(viewer: Viewer, colors: PlanColors) {
     for (const p of route) place(p)
     const pieces = clipper.pieces(route)
     tracePieces(context, pieces)
+    context.setLineDash(pending ? CANDIDATE.dash : [])
     strokeSelected()
+    context.setLineDash([])
+    if (pending) return
     context.beginPath()
     for (const piece of pieces) {
       if (route[piece.index].level !== 'hazard') continue
@@ -275,9 +279,11 @@ export function addPlanOverlay(viewer: Viewer, colors: PlanColors) {
   }
 
   return {
-    set(nextVertices: PlanVertex[], nextRoute: RoutePoint[] | null) {
+    // Keep the full path, including generated bends, while its assessment loads.
+    set(nextVertices: PlanVertex[], nextRoute: RoutePoint[] | null, assessing = false) {
       vertices = nextVertices.map(project)
       route = (nextRoute ?? []).map(project)
+      pending = assessing
       redraw()
     },
     setAlternatives(next: Alternative[]) {

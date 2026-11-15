@@ -78,3 +78,29 @@ index 22feddd344c0eca3089ad48a210eb736f7b1f0d6..57bfc22dd6fdae92ac19be4dff4a0cf2
    this._gl.deleteProgram(this._program);
    return destroyObject(this);
  };
+diff --git a/Source/Scene/ScreenSpaceCameraController.js b/Source/Scene/ScreenSpaceCameraController.js
+index f78a42728e14adfc3b6245ef8bc15f13e0dec7b1..7c0a6e74c7bd9476d6a966ac5c3092a1c6f131b7 100644
+--- a/Source/Scene/ScreenSpaceCameraController.js
++++ b/Source/Scene/ScreenSpaceCameraController.js
+@@ -799,7 +799,7 @@ function handleZoom(
+               object._zoomMouseStart.x = -1;
+               return;
+             }
+-            const alpha = Math.acos(-alphaDot);
++            const alpha = CesiumMath.acosClamped(-alphaDot);
+             const cameraDistance = Cartesian3.magnitude(cameraPosition);
+             const targetDistance = Cartesian3.magnitude(target);
+             const remainingDistance = cameraDistance - distance;
+@@ -826,6 +826,12 @@ function handleZoom(
+             Cartesian3.normalize(cameraPosition, up);
+             let right = scratchCameraRightNormal;
+             right = Cartesian3.cross(positionToTargetNormal, up, right);
++            // A straight-down zoom has no rotation axis. Move along the view
++            // instead of normalizing a zero vector and stopping rendering.
++            if (Cartesian3.magnitudeSquared(right) < CesiumMath.EPSILON14) {
++              camera.zoomIn(distance);
++              return;
++            }
+             right = Cartesian3.normalize(right, right);
+ 
+             Cartesian3.normalize(
