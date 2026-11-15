@@ -1,0 +1,90 @@
+/* Layer switcher, bottom left of the map. */
+.switcher {
+  position: absolute;
+  left: 30px;
+  bottom: 30px;
+  z-index: 2;
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-2);
+  pointer-events: auto;
+}
+.switcher button { font: inherit; color: inherit; border-radius: var(--radius); }
+
+.switcher__main {
+  position: relative;
+  width: 84px;
+  height: 84px;
+  padding: 0;
+  border: 2px solid var(--color-text);
+  background: var(--color-surface);
+  overflow: hidden;
+}
+.switcher__main .switcher__thumb { position: absolute; inset: 0; width: auto; height: auto; border: 0; }
+.switcher__label {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: var(--space-1) 0;
+  background: rgb(5 7 9 / 0.72);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+}
+
+.switcher__row {
+  display: flex;
+  gap: var(--space-2);
+  padding: var(--space-2);
+  border: 1px solid var(--color-line-strong);
+  background: var(--color-surface);
+}
+.switcher__row[hidden] { display: none; }
+
+.switcher__tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  width: 64px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-text-dim) !important;
+  font-size: var(--text-min) !important;
+}
+.switcher__tile:hover { color: var(--color-text-muted) !important; }
+.switcher__tile[aria-pressed='true'] { color: var(--color-text) !important; }
+.switcher__tile[aria-pressed='true'] .switcher__thumb { border-color: var(--color-accent); }
+.switcher__tile span:last-child { white-space: nowrap; }
+
+.switcher__thumb {
+  position: relative;
+  display: block;
+  width: 56px;
+  height: 56px;
+  border: 2px solid var(--color-line-strong);
+  overflow: hidden;
+}
+.switcher__thumb img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.switcher__tile:not([aria-pressed='true']) .switcher__thumb img { opacity: 0.6; }
+.switcher__retry {
+  align-self: center;
+  max-width: 160px;
+  padding: var(--space-2);
+  border: 1px solid var(--color-line-strong);
+  background: var(--color-surface-raised);
+  font-size: var(--text-data) !important;
+}
+
+@media (max-width: 700px) {
+  .switcher { left: 22px; bottom: 96px; }
+  .switcher__main { width: 64px; height: 64px; }
+  .switcher__row { flex-wrap: wrap; max-width: calc(100vw - 120px); }
+}

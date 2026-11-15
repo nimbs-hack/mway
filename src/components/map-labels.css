@@ -1,0 +1,44 @@
+/* Leader lines keep their ground anchors; only the text moves to make room. */
+.map-labels {
+  position: absolute;
+  inset: 0;
+  z-index: 900;
+  overflow: hidden;
+  pointer-events: none;
+}
+.map-labels > svg { width: 100%; height: 100%; overflow: visible; }
+.map-labels path, .map-labels circle { fill: none; }
+.map-labels .map-label__crew-pin { fill: var(--color-text); stroke: var(--color-bg); stroke-width: 3; }
+/* One line with a dark edge, not two rails: the casing is only a halo. */
+.map-label__casing { stroke: var(--color-bg); stroke-width: 3.5; stroke-opacity: 0.8; }
+.map-label__leader { stroke: var(--color-text-muted); stroke-width: 1.25; }
+.map-label__ring { stroke: var(--color-text-muted); stroke-width: 1.25; }
+.is-active > .map-label__leader, .is-active > .map-label__ring { stroke: var(--color-text); stroke-width: 1.75; }
+.map-label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: 28px;
+  max-width: 320px;
+  padding: 0 var(--space-2);
+  border: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font: 600 var(--text-label)/1 var(--font-mono);
+  text-align: left;
+  white-space: nowrap;
+  pointer-events: auto;
+}
+.map-label[hidden] { display: none; }
+.map-label span { overflow: hidden; text-overflow: ellipsis; }
+.map-label img { width: 20px; height: 20px; flex: none; }
+.map-label .map-label__portrait { width: 24px; height: 24px; flex: none; object-fit: cover; }
+.map-label__initials { display: grid; place-items: center; background: var(--color-surface-raised); }
+.map-label:hover, .map-label:focus-visible { background: var(--color-surface-raised); outline: 1px solid var(--color-text-muted); }
+.map-label.is-selected { color: var(--color-accent); }
+.map-label--cluster { justify-content: space-between; color: var(--color-text-muted); }
+.map-label--cluster b { font-weight: 600; color: var(--color-text); }
+.map-label--cluster:hover, .map-label--cluster:focus-visible { color: var(--color-text); }

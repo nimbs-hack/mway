@@ -1,0 +1,82 @@
+/* In-suit view. Large type, few items, big targets for gloved hands. */
+.hud--suit .layers,
+.hud--suit .sites,
+.hud--suit .readout,
+.hud--suit .nav,
+.hud--suit .pointmenu,
+.hud--suit .profile { display: none !important; }
+
+/* The layer switcher stays, lifted clear of the controls along the bottom. */
+.hud--suit .switcher { bottom: calc(30px + var(--button-height) + var(--button-gap)); }
+
+.suit { position: absolute; inset: 30px; pointer-events: none; font-family: var(--font-mono); }
+.suit__block {
+  position: absolute;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-line-strong);
+  background: rgb(12 14 17 / 0.85);
+}
+.suit__block--nav { left: 0; }
+.suit__block--slope { left: 50%; translate: -50% 0; text-align: center; border-width: 2px; }
+.suit__block--slope.is-caution { border-color: var(--color-caution); }
+.suit__block--slope.is-hazard { border-color: var(--color-hazard); }
+.suit__block--env { right: 0; text-align: right; }
+.suit__label { color: var(--color-text-dim); font-size: var(--text-label); }
+.suit__block--env .suit__label:not(:first-child) { margin-top: var(--space-2); }
+.suit__value { font-size: 48px; line-height: 1.05; font-variant-numeric: tabular-nums; }
+.suit__value--small { font-size: var(--text-readout); }
+.suit__sub { color: var(--color-text-muted); font-size: var(--text-button); }
+.suit__block.is-caution .suit__value,
+.suit__block.is-caution .suit__sub { color: var(--color-caution); }
+.suit__block.is-hazard .suit__value,
+.suit__block.is-hazard .suit__sub { color: var(--color-hazard); }
+
+.suit__controls {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: stretch;
+  gap: var(--button-gap);
+  pointer-events: auto;
+}
+.suit__controls button {
+  min-width: 96px;
+  height: var(--button-height);
+  border: 1px solid var(--color-line-strong);
+  border-radius: var(--radius);
+  background: var(--color-surface-raised);
+  color: var(--color-text);
+  font: 700 var(--text-button) var(--font-mono);
+}
+.suit__controls button:hover { border-color: var(--color-text-muted); }
+.suit__controls .suit__play[aria-pressed='true'] { border-color: var(--color-text); }
+.suit__controls .suit__exit { background: var(--gradient-accent); border-color: transparent; clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--chamfer)), calc(100% - var(--chamfer)) 100%, 0 100%); }
+.suit__track {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-1);
+  padding: 0 var(--space-4);
+  border: 1px solid var(--color-line);
+  background: rgb(12 14 17 / 0.85);
+}
+.suit__track input { width: 100%; height: 24px; margin: 0; accent-color: var(--color-accent); cursor: pointer; }
+
+@media (max-width: 700px) {
+  /* The controls wrap onto several rows here and leave the switcher no room. */
+  .hud--suit .switcher { display: none; }
+  .suit { inset: 16px; }
+  .suit__block { position: static; translate: none; text-align: left !important; }
+  .suit { display: flex; flex-direction: column; gap: var(--space-2); }
+  .suit__value { font-size: var(--text-readout); }
+  .suit__controls { flex-wrap: wrap; margin-top: auto; position: static; }
+  .suit__track { order: -1; flex-basis: 100%; min-height: 56px; }
+  .suit__controls button { flex: 1; min-width: 0; }
+}

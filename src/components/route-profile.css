@@ -1,0 +1,165 @@
+/* Route profile strip along the bottom of the map, and the point readout. */
+.profile {
+  position: absolute;
+  /* Clear of the layer switcher on the left. */
+  left: 130px;
+  right: 30px;
+  bottom: 30px;
+  border: 1px solid var(--color-line-strong);
+  background: var(--color-surface);
+  font-size: var(--text-label);
+  pointer-events: auto;
+}
+.profile button { font: inherit; color: inherit; border-radius: var(--radius); }
+.profile p,
+.profile dl,
+.profile dd { margin: 0; }
+
+.profile__head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-3) var(--space-6);
+  padding: var(--space-2) var(--space-2) var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--color-line);
+}
+.profile__segment { display: flex; border: 1px solid var(--color-line); }
+.profile__segment button,
+.profile__actions button {
+  min-height: 36px;
+  padding: 0 var(--space-3);
+  border: 0;
+  background: transparent;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+}
+.profile__segment button + button { border-left: 1px solid var(--color-line); }
+.profile__segment button[aria-pressed='true'] { background: var(--color-surface-raised); color: var(--color-text); box-shadow: inset 0 -2px 0 var(--color-accent); }
+
+.profile__stats { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-6); }
+.profile__stats .is-caution { color: var(--color-caution); }
+.profile__stats .is-hazard { color: var(--color-hazard); }
+.profile__stats div { display: flex; flex-direction: column; }
+.profile__stats dt {
+  color: var(--color-text-dim);
+  font-family: var(--font-mono);
+}
+.profile__stats dd { font: var(--text-body)/1.3 var(--font-mono); font-variant-numeric: tabular-nums; }
+
+.profile__actions { display: flex; gap: var(--space-2); margin-left: auto; }
+.profile__suit { border: 1px solid var(--color-line-strong) !important; color: var(--color-text) !important; }
+.profile__suit:hover:not(:disabled) { background: var(--color-surface-raised) !important; }
+.profile__suit:disabled { opacity: 0.4; cursor: default; }
+.profile__hud { display: flex; align-items: center; min-height: 36px; padding: 0 var(--space-3); border: 1px solid var(--color-line-strong); color: var(--color-text); font-family: var(--font-mono); text-decoration: none; }
+.profile__hud:hover { background: var(--color-surface-raised); }
+.profile__close { width: 36px; padding: 0 !important; font-size: var(--text-button) !important; }
+
+.profile__note { padding: var(--space-3); color: var(--color-text-muted); }
+.profile__note button { margin-left: var(--space-2); min-height: 32px; padding: 0 var(--space-3); border: 1px solid var(--color-line-strong); background: var(--color-surface-raised); }
+
+.profile__body { display: flex; flex-direction: column; gap: var(--space-1); padding: var(--space-3) var(--space-3) var(--space-2); }
+
+/* Elevation chart. The area under the line is filled by slope level. */
+.profile__chart { position: relative; height: 96px; cursor: crosshair; touch-action: none; }
+.profile__chart:focus-visible { outline: 2px solid var(--color-text); outline-offset: 2px; }
+.profile__svg { display: block; width: 100%; height: 100%; }
+.profile__band.is-ok,
+.profile__band.is-unknown { fill: var(--color-surface-raised); }
+.profile__band.is-caution { fill: color-mix(in srgb, var(--color-caution) 55%, transparent); }
+.profile__band.is-hazard { fill: color-mix(in srgb, var(--color-hazard) 70%, transparent); }
+.profile__hatch { fill: url(#profile-hatch); }
+#profile-hatch line { stroke: var(--color-bg); stroke-width: 2; stroke-opacity: 0.6; }
+.profile__line { fill: none; stroke: var(--color-text); stroke-width: 1.5; }
+.profile__line.is-coarse { stroke-dasharray: 4 4; }
+
+/* Elevation at the top and bottom of the chart, right aligned inside it.
+   These are values, so they read in the main text color. */
+.profile__axis {
+  position: absolute;
+  right: 0;
+  padding: 0 var(--space-1);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-family: var(--font-mono);
+  pointer-events: none;
+}
+.profile__axis--top { top: 0; }
+.profile__axis--bottom { bottom: 0; }
+
+/* Waypoints: a dashed line with its number at the top. */
+.profile__mark {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-left: 1px dashed var(--color-line-strong);
+  pointer-events: none;
+}
+.profile__mark { color: var(--color-text-muted); font-family: var(--font-mono); padding-left: 4px; line-height: 1; }
+
+.profile__cursor { position: absolute; top: 0; bottom: 0; width: 0; border-left: 1px solid var(--color-text); pointer-events: none; }
+.profile__cursor span {
+  position: absolute;
+  top: 0;
+  left: 8px;
+  display: flex;
+  gap: var(--space-3);
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--color-line-strong);
+  background: var(--color-bg);
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.profile__cursor span.is-flipped { left: auto; right: 8px; }
+.profile__cursor b { font-weight: 600; }
+.profile__cursor i { font-style: normal; }
+
+/* A thin layer strip under the chart, sharing its distance axis. Its name
+   gets a line of its own, clear of the elevation line above. */
+.profile__layer { display: grid; gap: 2px; margin-top: var(--space-1); }
+.profile__layer span {
+  color: var(--color-text-muted);
+  font-size: var(--text-min);
+  line-height: 1.2;
+  pointer-events: none;
+}
+.profile__strip { display: block; width: 100%; height: 8px; }
+.profile__layer:hover span { color: var(--color-text); }
+
+.profile__ticks {
+  display: flex;
+  justify-content: space-between;
+  color: var(--color-text);
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.is-caution { color: var(--color-caution); }
+.is-hazard { color: var(--color-hazard); }
+
+/* Keep map controls above the open profile. */
+.hud--profile .nav {
+  top: 90px;
+  max-height: max(44px, calc(100% - 320px));
+  translate: none;
+}
+/* On a desktop map the rail starts at the top, with the current site
+   beside it, not under it. Shorter buttons let the whole rail fit. */
+@media (min-width: 701px) and (min-height: 701px) {
+  .hud--profile .nav { top: 30px; max-height: max(44px, calc(100% - 310px)); }
+  .hud--profile .nav button { flex-basis: 40px; height: 40px; }
+  .hud--profile .readout--tr { right: calc(30px + 44px + var(--space-3)); }
+}
+.hud--profile .readout--br { display: none; }
+
+@media (max-width: 700px) {
+  .profile { left: 22px; right: 22px !important; bottom: 22px; }
+  .profile__stats { order: 3; width: 100%; gap: var(--space-1) var(--space-4); }
+  .profile__stats dd { font-size: var(--text-label); }
+  .profile__chart { height: 72px; }
+}
+
+@media (max-height: 700px) and (min-width: 701px) {
+  .profile__chart { height: 64px; }
+}
+

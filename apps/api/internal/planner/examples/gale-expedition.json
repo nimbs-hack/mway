@@ -1,0 +1,78 @@
+{
+  "note": "Fictional sample mission. The sites sit in Gale crater, along Curiosity's route.",
+  "name": "Gale expedition",
+  "type": "mars-long-stay",
+  "crew": [
+    "Christina Koch",
+    "Robert Hines",
+    "Jessica Meir",
+    "Victor Glover",
+    "Kjell Lindgren",
+    "Frank Rubio"
+  ],
+  "sites": [
+    {
+      "name": "BASE",
+      "lat": -4.5895,
+      "lon": 137.4417
+    },
+    {
+      "name": "SITE-A",
+      "lat": -4.68,
+      "lon": 137.405
+    },
+    {
+      "name": "SITE-B",
+      "lat": -4.826,
+      "lon": 137.3889
+    }
+  ],
+  "tasks": [
+    {
+      "site": "BASE",
+      "phase": 1,
+      "crew": "Robert Hines",
+      "kind": "repair",
+      "hours": 6,
+      "note": "antenna mast"
+    },
+    {
+      "site": "BASE",
+      "phase": 1,
+      "crew": "Kjell Lindgren",
+      "kind": "other",
+      "hours": 4,
+      "eva": false,
+      "note": "medical checks"
+    },
+    {
+      "site": "SITE-A",
+      "phase": 1,
+      "crew": "Jessica Meir",
+      "kind": "sample",
+      "hours": 8
+    },
+    {
+      "site": "SITE-A",
+      "phase": 1,
+      "crew": "Victor Glover",
+      "kind": "survey",
+      "hours": 8
+    },
+    {
+      "site": "SITE-B",
+      "phase": 1,
+      "crew": "Victor Glover",
+      "kind": "drill",
+      "hours": 12,
+      "note": "2 m core"
+    },
+    {
+      "site": "SITE-B",
+      "phase": 1,
+      "crew": "Frank Rubio",
+      "kind": "image",
+      "hours": 4
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+/* Helmet view. The ground and the helmet rim are one canvas. The EVA HUD
+   (src/hud) lies over it, inside the opening so the rim never hides it. */
+html { background: var(--color-bg); }
+
+.helmet {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  cursor: grab;
+  touch-action: none;
+}
+.helmet__ground { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
+
+/* The opening is rounder than the screen, so the HUD keeps clear of the
+   corners. The lower edge is the widest part of the rim. */
+.helmet__hud { position: absolute; inset: 7% 7.5% 8.5%; will-change: transform; }
+
+/* One line that says what the picture is, in the HUD's cased text. */
+.helmet__note,
+.helmet__failed {
+  position: absolute;
+  margin: 0;
+  font-size: var(--text-data);
+  font-weight: 600;
+  paint-order: stroke fill;
+  -webkit-text-stroke: 2px color-mix(in srgb, var(--color-bg) 85%, transparent);
+  pointer-events: none;
+}
+.helmet__note { right: 7.5%; bottom: 8.5%; padding: var(--space-6); text-align: right; }
+.helmet__failed { inset: 45% 20% auto; color: var(--color-warning); text-align: center; }
+
+/* Compass tape and suit readings: what the helmet view adds to the HUD. Both
+   are simulated, and the suit block says so. Same cased text as the HUD. */
+.helmet__compass,
+.helmet__suit {
+  position: absolute;
+  font-weight: 600;
+  paint-order: stroke fill;
+  -webkit-text-stroke: 2px color-mix(in srgb, var(--color-bg) 85%, transparent);
+  pointer-events: none;
+}
+.helmet__compass { top: var(--space-6); left: 50%; display: flex; flex-direction: column; align-items: center; gap: var(--space-1); transform: translateX(-50%); }
+.helmet__compass b { font-size: var(--text-section); font-weight: 400; line-height: 1; font-variant-numeric: tabular-nums; -webkit-text-stroke-width: 3px; }
+.helmet__compass svg { display: block; }
+.helmet__tick,
+.helmet__tick-casing { fill: none; }
+.helmet__tick-casing { stroke: color-mix(in srgb, var(--color-bg) 85%, transparent); stroke-width: 4; stroke-linejoin: round; }
+.helmet__tick { stroke: var(--color-text); stroke-width: 1.5; }
+.helmet__tick--major { stroke-width: 2; }
+.helmet__needle { fill: var(--color-text); }
+.helmet__compass text { fill: var(--color-text); stroke: color-mix(in srgb, var(--color-bg) 85%, transparent); stroke-width: 2.5; font-size: var(--text-label); font-variant-numeric: tabular-nums; -webkit-text-stroke: 0; }
+
+/* Under the HUD's left column, above its footer. */
+.helmet__suit { left: var(--space-6); bottom: calc(var(--space-6) + var(--space-8) + var(--space-2)); width: 216px; border-collapse: collapse; font-size: var(--text-data); }
+.helmet__suit caption { padding-bottom: var(--space-1); font-size: var(--text-label); text-align: left; }
+.helmet__suit th { padding: 2px 0; font-weight: 600; text-align: left; }
+.helmet__suit td { padding: 2px 0; text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* The stacked HUD of a narrow display has no free corner for them. */
+@media (max-width: 900px) {
+  .helmet__compass,
+  .helmet__suit { display: none; }
+}

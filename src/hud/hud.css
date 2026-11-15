@@ -1,0 +1,157 @@
+/* EVA HUD. Drawn over the astronaut's view, so nothing here has a
+   background: the page is transparent and the ground shows through. The
+   middle of the view stays clear, with everything along the edges. Text and
+   lines carry a dark casing instead, so they read on bright ground as well
+   as on dark sky. Sizes and colors are tokens. */
+:root { color-scheme: dark; }
+*,
+*::before,
+*::after { box-sizing: border-box; }
+html,
+body,
+#root { height: 100%; }
+html,
+body { background: transparent; }
+body {
+  margin: 0;
+  color: var(--color-text);
+  font: var(--text-body)/1.4 var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  cursor: default;
+  user-select: none;
+}
+
+.visor {
+  /* Width of the two edge columns. */
+  --visor-left: 216px;
+  --visor-right: 300px;
+  /* The dark edge under every glyph and line. A hard edge, not a glow. */
+  --visor-casing: color-mix(in srgb, var(--color-bg) 85%, transparent);
+  display: grid;
+  grid-template:
+    "head head head" auto
+    "left . right" minmax(0, 1fr)
+    "left profile right" auto
+    "foot foot foot" auto / var(--visor-left) minmax(0, 1fr) var(--visor-right);
+  gap: var(--space-4) var(--space-8);
+  height: 100%;
+  padding: var(--space-6);
+  /* A display only: clicks go to whatever is under it. */
+  pointer-events: none;
+  paint-order: stroke fill;
+  -webkit-text-stroke: 2px var(--visor-casing);
+  /* Grey text turns to mud over bright ground, and thin strokes drown in
+     their casing. Small text is the text color at 600. Labels are told from
+     their values by size, and the large values stay at 400. */
+  font-weight: 600;
+}
+/* Verdict, its reasons and the clock, along the top */
+.visor__head { grid-area: head; display: flex; align-items: flex-start; gap: var(--space-8); }
+.visor__verdict { font-size: var(--text-title); font-weight: 700; line-height: 1; white-space: nowrap; -webkit-text-stroke-width: 4px; }
+.visor__verdict.is-go { color: var(--color-ok); }
+.visor__verdict.is-caution { color: var(--color-caution); }
+.visor__verdict.is-no-go { color: var(--color-hazard); }
+/* A shape with the color, since color alone may not carry an alert
+   (NASA-STD-3001 Vol 2, V2 10045). Filled for over a limit, outline for near. */
+.visor__verdict.is-no-go::before,
+.visor__readout.is-hazard b::before,
+.visor__reasons .is-hazard::before,
+.visor__table .is-hazard::before { content: "▲\00a0"; }
+.visor__verdict.is-caution::before,
+.visor__readout.is-caution b::before,
+.visor__reasons .is-caution::before,
+.visor__table .is-caution::before { content: "△\00a0"; }
+/* The alert color goes on the number, not on a box around it. */
+.visor__readout.is-hazard b,
+.visor__reasons .is-hazard::before,
+.visor__table .is-hazard { color: var(--color-hazard); }
+.visor__readout.is-caution b,
+.visor__reasons .is-caution::before,
+.visor__table .is-caution { color: var(--color-caution); }
+
+.visor__reasons { display: flex; flex-direction: column; gap: var(--space-1); min-width: 0; margin: 0; padding: 0; list-style: none; }
+.visor__stale { color: var(--color-warning); -webkit-text-stroke-width: 3px; }
+.visor__none { display: flex; flex-direction: column; margin: 0; }
+.visor__none b { color: var(--color-text); font-size: var(--text-section); }
+.visor__clock { margin: 0 0 0 auto; white-space: nowrap; }
+.visor__clock b { font-size: var(--text-readout); font-weight: 400; font-variant-numeric: tabular-nums; -webkit-text-stroke-width: 3px; }
+
+/* Numbers, down the left */
+.visor__readouts { grid-area: left; display: flex; flex-direction: column; gap: var(--space-3); margin: 0; }
+.visor__readout dt { font-size: var(--text-data); }
+.visor__readout dd { margin: 0; }
+.visor__value { line-height: 1.2; white-space: nowrap; }
+.visor__value b { font-size: var(--text-readout); font-weight: 400; font-variant-numeric: tabular-nums; -webkit-text-stroke-width: 3px; }
+.visor__sub { font-size: var(--text-data); font-variant-numeric: tabular-nums; white-space: pre; }
+
+/* Route map, legs and estimates, down the right */
+.visor__right { grid-area: right; display: flex; flex-direction: column; gap: var(--space-3); min-height: 0; }
+.visor__map { position: relative; aspect-ratio: 1; border: 1px solid color-mix(in srgb, var(--color-text) 40%, transparent); }
+.visor__map svg { position: absolute; inset: 0; display: block; }
+.visor__grid line { stroke: color-mix(in srgb, var(--color-text) 40%, transparent); }
+.visor__casing,
+.visor__plan,
+.visor__over { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+/* The plan line of the planner's map: solid accent on a dark halo, with
+   over-limit stretches wider and red on top. Widths from plan-overlay.ts. */
+.visor__casing { stroke: var(--visor-casing); stroke-width: 6.5; }
+.visor__plan { stroke: var(--color-accent); stroke-width: 3.5; }
+.visor__casing--over { stroke-width: 9; }
+.visor__over { stroke: var(--color-hazard); stroke-width: 6; }
+.visor__pin rect { fill: var(--color-surface); stroke: var(--color-text); stroke-width: 2; }
+.visor__pin.is-start rect { stroke: var(--color-accent); }
+.visor__pin.is-target rect { stroke: var(--color-ok); }
+.visor__map text { fill: var(--color-text); stroke: var(--visor-casing); stroke-width: 2.5; paint-order: stroke fill; font-size: var(--text-label); font-weight: 600; -webkit-text-stroke: 0; }
+.visor__pin text { stroke: none; }
+.visor__north path { fill: var(--color-text); stroke: var(--visor-casing); stroke-width: 3; paint-order: stroke fill; }
+.visor__scale path { fill: none; stroke: var(--color-text); stroke-width: 1.5; }
+.visor__scale .visor__casing { stroke: var(--visor-casing); stroke-width: 4.5; stroke-linecap: butt; }
+.visor__scale text { font-variant-numeric: tabular-nums; }
+
+.visor__key { display: flex; gap: var(--space-6); margin: 0; padding: 0; list-style: none; font-size: var(--text-data); }
+.visor__key li { display: flex; align-items: center; gap: var(--space-2); }
+.visor__swatch { width: 28px; height: 3.5px; background: var(--color-accent); outline: 1.5px solid var(--visor-casing); }
+.visor__swatch--over { height: 6px; background: var(--color-hazard); }
+
+.visor__table { width: 100%; border-collapse: collapse; font-size: var(--text-data); }
+.visor__table th { padding-bottom: var(--space-1); font-size: var(--text-label); text-align: right; }
+.visor__table td { padding: 2px 0; text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.visor__table th:first-child,
+.visor__table td:first-child { text-align: left; }
+
+/* Elevation profile, along the bottom between the columns */
+.visor__profile { grid-area: profile; align-self: end; min-width: 0; }
+.visor__chart { position: relative; height: 72px; }
+.visor__chart svg { display: block; width: 100%; height: 100%; overflow: visible; }
+/* Ground within the limit gets only a light veil, so it stays see-through. */
+.visor__band.is-ok,
+.visor__band.is-unknown { fill: color-mix(in srgb, var(--color-bg) 35%, transparent); }
+.visor__band.is-caution { fill: color-mix(in srgb, var(--color-caution) 60%, transparent); }
+.visor__band.is-hazard { fill: color-mix(in srgb, var(--color-hazard) 75%, transparent); }
+.visor__hatch { fill: url(#visor-hatch); }
+#visor-hatch line { stroke: var(--color-bg); stroke-width: 2; stroke-opacity: 0.6; }
+.visor__line { fill: none; stroke: var(--color-text); stroke-width: 1.5; }
+.visor__line--casing { stroke: var(--visor-casing); stroke-width: 4.5; }
+.visor__line.is-coarse { stroke-dasharray: 4 4; }
+.visor__axis { position: absolute; right: 0; padding: 0 var(--space-1); font-size: var(--text-label); font-variant-numeric: tabular-nums; }
+.visor__axis--top { top: 0; }
+.visor__axis--bottom { bottom: 0; }
+.visor__mark {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  padding-left: var(--space-1);
+  border-left: 1px solid var(--color-text);
+  font-size: var(--text-label);
+  font-weight: 600;
+}
+.visor__ticks { display: flex; justify-content: space-between; margin-top: var(--space-1); font-size: var(--text-label); font-variant-numeric: tabular-nums; }
+
+.visor__foot { grid-area: foot; font-size: var(--text-data); }
+
+/* A narrow display stacks the pieces. */
+@media (max-width: 900px) {
+  .visor { grid-template: "head" auto "right" auto "profile" auto "left" auto "foot" auto / minmax(0, 1fr); align-content: start; height: auto; min-height: 100%; }
+  .visor__head { flex-wrap: wrap; gap: var(--space-3) var(--space-6); }
+  .visor__readouts { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4) var(--space-6); }
+}

@@ -1,0 +1,95 @@
+/*
+ * NIMBS design tokens, taken from docs/assets/mission-console.svg
+ * (Figma: https://www.figma.com/design/xRsXzeKw6fl8MdyWuNOsxh/Untitled?node-id=10-78).
+ * Components use these variables. Don't hardcode values that exist here.
+ * The app is dark only. There is no light theme.
+ */
+:root {
+  /* Surfaces, darkest to lightest */
+  --color-bg: #050709;           /* page and map canvas */
+  --color-surface: #0c0e11;      /* top bar, sidebar, status bar */
+  --color-surface-raised: #15181c; /* idle buttons, cards */
+
+  /* Text. Warm off-white, never pure #fff */
+  --color-text: #fff8f3;
+  /* Both greys pass 4.5:1 on every surface above, since they carry 12px
+     labels and units. The old dim, #6c6c6c, was 3.4:1 on raised cards. */
+  --color-text-muted: #a8a8a8;   /* body copy, descriptions, row labels */
+  --color-text-dim: #858585;     /* value labels, units */
+
+  /* Lines are text color at low opacity */
+  --color-line: rgb(255 248 243 / 0.08);        /* grid, dividers, idle borders */
+  --color-line-strong: rgb(255 248 243 / 0.24); /* active borders, slider track, separators */
+
+  /* Accent. Magenta, the active-route color of aircraft navigation displays.
+     Use it for the primary action and the current selection only. Not red:
+     NASA-STD-3001 Vol 2 [V2 10118] keeps red for the highest alert level. */
+  --color-accent: #d23ce6;
+  --color-accent-deep: #a3209f;
+  --color-accent-shade: rgb(96 18 100 / 0.24);  /* arrow cell on the active button */
+  --gradient-accent: linear-gradient(90deg, var(--color-accent), var(--color-accent-deep));
+
+  /* Status */
+  --color-ok: #3fb68b;           /* real, healthy status only */
+  --color-warning: #e8ba73;      /* missing data and degraded map detail */
+
+  /* A setting changed from its preset. Cool, so it never reads as a hazard. */
+  --color-modified: #7fb2ff;
+
+  /* Suggested route lines, from deploy-v1's ROUTE_STRATEGY_VISUALS.
+     Detour and thermal sit close to caution and ok. They only ever appear
+     as dashed candidate lines, never on a value. */
+  --color-route-fast: #e5e0dc;
+  --color-route-flat: #38bdf8;
+  --color-route-thermal: #3fb68b;
+  --color-route-detour: #eab308;
+
+  /* Alert levels, from NASA-STD-3001 Vol 2: red for the highest alert
+     [V2 10118], yellow for the second [V2 10119]. Pair them with a shape,
+     since color alone may not carry critical meaning [V2 10045]. */
+  --color-caution: #e8c547;      /* within 5° of a limit, or close to another limit */
+  --color-hazard: #ff3b3b;       /* over a limit: NO-GO */
+
+  /* Type. One family everywhere. Numbers keep their columns through
+     tabular figures (font-variant-numeric on the value), not a second,
+     monospace font.
+     --font-mono stays as a name for "this is a number or code". */
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-mono: var(--font-sans);
+
+  /* Nothing under 12px: [V2 10049] asks for 0.25° of visual angle, about
+     12 CSS px, since a CSS px is defined as 0.0213°. */
+  --text-min: 12px;
+  /* The whole scale. Pick from it; a size between two steps is noise. */
+  --text-label: 12px;   /* value labels and units: sentence case, dim */
+  --text-data: 13px;    /* numbers in tables and lists, small buttons, notes */
+  --text-body: 15px;    /* body copy, row labels, big buttons */
+  --text-button: 15px;  /* sentence case, bold */
+  --text-heading: 17px; /* card and tab titles, the verdict */
+  --text-section: 22px; /* task title in the site panel, tool results */
+  --text-readout: 28px; /* telemetry values */
+  --text-title: 40px;   /* bold */
+
+  /* Spacing and layout (px, 1920x1080 frame) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;  /* panel padding */
+  --grid-cell: 80px; /* map background grid */
+
+  --topbar-height: 56px;
+  --statusbar-height: 32px;
+  --sidebar-width: 480px;
+  --button-height: 56px;
+  --button-gap: 12px;
+  --button-icon-width: 64px;
+  --control-height: 36px; /* form fields, list rows, compact buttons */
+
+  /* Shape. Square corners everywhere. The only "radius" is the clipped
+     bottom-right corner on nav buttons. */
+  --radius: 0;
+  --chamfer: 12px;
+  --border-width: 1px;
+}

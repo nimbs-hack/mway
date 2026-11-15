@@ -1,0 +1,74 @@
+/* Camera and view controls share the right edge of the map. */
+
+.nav {
+  position: absolute;
+  top: 50%;
+  right: 30px;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100% - 120px);
+  overflow-y: auto;
+  translate: 0 -50%;
+  border: 1px solid var(--color-line);
+  background: var(--color-surface);
+  pointer-events: auto;
+}
+
+.nav button {
+  display: grid;
+  place-items: center;
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-top: 1px solid var(--color-line);
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: var(--text-button);
+}
+
+.nav button:first-child {
+  border-top: 0;
+}
+
+.nav button:hover {
+  background: var(--color-surface-raised);
+  color: var(--color-text);
+}
+
+.nav .nav__text {
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+}
+
+.nav svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.nav__compass svg {
+  stroke: none;
+}
+
+.nav .nav__section {
+  border-top-color: var(--color-line-strong);
+}
+
+.nav button:focus-visible {
+  outline-offset: -3px;
+}
+
+.nav__needle-n {
+  fill: var(--color-text);
+}
+
+.nav__needle-s {
+  fill: var(--color-text-dim);
+}
+

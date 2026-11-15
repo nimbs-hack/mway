@@ -1,0 +1,37 @@
+{
+  "name": "mission-planner",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bun --bun vite",
+    "build": "bun run build:web && bun run build:api",
+    "build:web": "bun --bun vite build && bun scripts/compress-assets.js",
+    "build:api": "go -C apps/api build -o ../../bin/mars-api ./cmd/server",
+    "preview": "bun --bun vite preview",
+    "start": "go -C apps/api run ./cmd/server -cache-dir ../../data/cache -static-dir ../../dist",
+    "planner": "go -C apps/api run ./cmd/hr-planner",
+    "tiles": "bun scripts/fetch-tiles.js",
+    "precache": "bun scripts/precache-map.ts",
+    "typecheck": "tsc --noEmit && go -C apps/api build ./...",
+    "lint": "go -C apps/api vet ./... && bun scripts/check-go-format.js",
+    "test": "bun test src scripts && go -C apps/api test -race ./..."
+  },
+  "dependencies": {
+    "@fontsource/inter": "^5.3.0",
+    "cesium": "^1.147.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@vitejs/plugin-react": "^6.3.0",
+    "typescript": "^5",
+    "vite": "^8.3.8",
+    "vite-plugin-static-copy": "^4.1.1"
+  },
+  "patchedDependencies": {
+    "@cesium/engine@26.5.0": "patches/@cesium%2Fengine@26.5.0.patch"
+  }
+}

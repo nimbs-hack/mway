@@ -1,0 +1,407 @@
+{
+  "name": "YELLOWKNIFE-DEMO",
+  "type": "custom",
+  "marginPercent": 40,
+  "crew": [
+    {
+      "name": "Jessica Meir",
+      "sex": "female",
+      "age": 35,
+      "massKg": 58.2,
+      "heightCm": 162,
+      "role": "scientist",
+      "activity": "active",
+      "evaShare": 1
+    },
+    {
+      "name": "Victor Glover",
+      "sex": "male",
+      "age": 44,
+      "massKg": 91.3,
+      "heightCm": 188,
+      "role": "flight-engineer",
+      "activity": "active",
+      "evaShare": 1
+    },
+    {
+      "name": "Christina Koch",
+      "sex": "female",
+      "age": 42,
+      "massKg": 68,
+      "heightCm": 171,
+      "role": "commander",
+      "activity": "active",
+      "evaShare": 0
+    },
+    {
+      "name": "Frank Rubio",
+      "sex": "male",
+      "age": 39,
+      "massKg": 76,
+      "heightCm": 178,
+      "role": "physician",
+      "activity": "active",
+      "evaShare": 0
+    }
+  ],
+  "phases": [
+    {
+      "kind": "lander",
+      "days": 1,
+      "evaHoursPerWeek": 0,
+      "waterRecovery": 0,
+      "oxygenRecovery": 0,
+      "hygieneWaterKg": 0.4,
+      "basePowerW": 2000,
+      "crewPowerW": 1080
+    },
+    {
+      "kind": "lander",
+      "days": 1,
+      "evaHoursPerWeek": 28,
+      "waterRecovery": 0,
+      "oxygenRecovery": 0,
+      "hygieneWaterKg": 0.4,
+      "basePowerW": 2000,
+      "crewPowerW": 1080
+    },
+    {
+      "kind": "lander",
+      "days": 1,
+      "evaHoursPerWeek": 0,
+      "waterRecovery": 0,
+      "oxygenRecovery": 0,
+      "hygieneWaterKg": 0.4,
+      "basePowerW": 2000,
+      "crewPowerW": 1080
+    }
+  ],
+  "sites": [
+    {
+      "name": "BASE-DEMO",
+      "lat": -4.58947,
+      "lon": 137.44163
+    },
+    {
+      "name": "CHECKPOINT-DEMO",
+      "lat": -4.59012,
+      "lon": 137.44289
+    },
+    {
+      "name": "CONTACT-CANDIDATE",
+      "lat": -4.5903,
+      "lon": 137.446
+    },
+    {
+      "name": "PANORAMA-CANDIDATE",
+      "lat": -4.59005,
+      "lon": 137.44935
+    },
+    {
+      "name": "SAMPLE-CANDIDATE",
+      "lat": -4.58964,
+      "lon": 137.44933
+    }
+  ],
+  "tasks": [
+    {
+      "site": 0,
+      "phase": 0,
+      "crew": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "kind": "other",
+      "eva": false,
+      "hours": 1,
+      "note": "D1 briefing and abort rehearsal"
+    },
+    {
+      "site": 0,
+      "phase": 0,
+      "crew": [
+        0,
+        1,
+        3
+      ],
+      "kind": "other",
+      "eva": false,
+      "hours": 1,
+      "note": "D1 medical and suit checks"
+    },
+    {
+      "site": 0,
+      "phase": 0,
+      "crew": [
+        0,
+        1
+      ],
+      "kind": "other",
+      "eva": false,
+      "hours": 1,
+      "note": "D1 clean tools and sample kits"
+    },
+    {
+      "site": 0,
+      "phase": 0,
+      "crew": [
+        0,
+        2
+      ],
+      "kind": "survey",
+      "eva": false,
+      "hours": 1,
+      "note": "D1 imagery and route review"
+    },
+    {
+      "site": 0,
+      "phase": 1,
+      "crew": [
+        0,
+        1
+      ],
+      "kind": "other",
+      "eva": true,
+      "hours": 0.5,
+      "note": "00:00 egress and buddy checks"
+    },
+    {
+      "site": 2,
+      "phase": 1,
+      "crew": [
+        0,
+        1
+      ],
+      "kind": "transfer",
+      "eva": true,
+      "hours": 0.5,
+      "note": "00:30 outbound via checkpoint"
+    },
+    {
+      "site": 2,
+      "phase": 1,
+      "crew": [
+        0,
+        1
+      ],
+      "kind": "survey",
+      "eva": true,
+      "hours": 0.5,
+      "note": "01:00 contact and grain survey"
+    },
+    {
+      "site": 3,
+      "phase": 1,
+      "crew": [
+        0,
+        1
+      ],
+      "kind": "image",
+      "eva": true,
+      "hours": 0.5,
+      "note": "01:30 move and panorama"
+    },
+    {
+      "site": 4,
+      "phase": 1,
+      "crew": [
+        0,
+        1
+      ],
+      "kind": "sample",
+      "eva": true,
+      "hours": 1,
+      "note": "02:00 move, pair and blank"
+    },
+    {
+      "site": 0,
+      "phase": 1,
+      "crew": [
+        0,
+        1
+      ],
+      "kind": "transfer",
+      "eva": true,
+      "hours": 0.5,
+      "note": "03:00 return via same stations"
+    },
+    {
+      "site": 0,
+      "phase": 1,
+      "crew": [
+        0,
+        1
+      ],
+      "kind": "other",
+      "eva": true,
+      "hours": 0.5,
+      "note": "03:30 ingress and handoff"
+    },
+    {
+      "site": 0,
+      "phase": 1,
+      "crew": [
+        2
+      ],
+      "kind": "other",
+      "eva": false,
+      "hours": 4,
+      "note": "T0-4h communications support"
+    },
+    {
+      "site": 0,
+      "phase": 1,
+      "crew": [
+        3
+      ],
+      "kind": "other",
+      "eva": false,
+      "hours": 4,
+      "note": "T0-4h medical and receiving"
+    },
+    {
+      "site": 0,
+      "phase": 2,
+      "crew": [
+        0,
+        3
+      ],
+      "kind": "sample",
+      "eva": false,
+      "hours": 2,
+      "note": "D3 inventory and sample triage"
+    },
+    {
+      "site": 0,
+      "phase": 2,
+      "crew": [
+        0,
+        2
+      ],
+      "kind": "image",
+      "eva": false,
+      "hours": 1,
+      "note": "D3 register images and notes"
+    },
+    {
+      "site": 0,
+      "phase": 2,
+      "crew": [
+        1
+      ],
+      "kind": "repair",
+      "eva": false,
+      "hours": 1,
+      "note": "D3 inspect and service gear"
+    },
+    {
+      "site": 0,
+      "phase": 2,
+      "crew": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "kind": "other",
+      "eva": false,
+      "hours": 1,
+      "note": "D3 evidence and limits debrief"
+    }
+  ],
+  "markers": [
+    {
+      "id": "yk-base",
+      "symbol": "mil2525c-habitat",
+      "point": [
+        -4.58947,
+        137.44163
+      ],
+      "label": "Demo base; shelter assumed"
+    },
+    {
+      "id": "yk-check",
+      "symbol": "mil2525c-checkpoint",
+      "point": [
+        -4.59012,
+        137.44289
+      ],
+      "label": "Demo outbound / return checkpoint"
+    },
+    {
+      "id": "yk-contact",
+      "symbol": "mil2525c-op",
+      "point": [
+        -4.5903,
+        137.446
+      ],
+      "label": "Candidate stratigraphy station"
+    },
+    {
+      "id": "yk-panorama",
+      "symbol": "mil2525c-recon",
+      "point": [
+        -4.59005,
+        137.44935
+      ],
+      "label": "Candidate context panorama"
+    },
+    {
+      "id": "yk-sample",
+      "symbol": "mil2525c-sample",
+      "point": [
+        -4.58964,
+        137.44933
+      ],
+      "label": "Candidate host / fracture pair"
+    },
+    {
+      "id": "yk-medical",
+      "symbol": "mil2525c-medevac",
+      "point": [
+        -4.58975,
+        137.4414
+      ],
+      "label": "Demo medical support"
+    },
+    {
+      "id": "yk-relay",
+      "symbol": "mil2525c-relay",
+      "point": [
+        -4.5892,
+        137.4419
+      ],
+      "label": "Demo relay; coverage unverified"
+    },
+    {
+      "id": "yk-supply",
+      "symbol": "mil2525c-supply",
+      "point": [
+        -4.58965,
+        137.4419
+      ],
+      "label": "Demo supplies; capacity unverified"
+    },
+    {
+      "id": "yk-unsurveyed",
+      "symbol": "mil2525c-unsurveyed",
+      "point": [
+        -4.5905,
+        137.4475
+      ],
+      "label": "Unsurveyed; inspect before crossing"
+    },
+    {
+      "id": "yk-rally",
+      "symbol": "mil2525c-rally",
+      "point": [
+        -4.58955,
+        137.4421
+      ],
+      "label": "Demo abort rally near base"
+    }
+  ],
+  "briefing": "Yellowknife Bay field mission, fictional operations on a real Mars science site\n\nPurpose\nCompare fine-grained host rock with fracture material to investigate deposition and later groundwater alteration in the Yellowknife Bay formation. NASA interprets the Sheepbed mudstone as an ancient lake deposit. Curiosity's John Klein observations record fine grains and sulfate-filled fractures, with chemistry compatible with a habitable ancient environment. Habitability does not establish that life existed. [S1]\n\nSuccess means a georeferenced context panorama, a documented stratigraphic sketch, paired candidate samples with contamination blanks, and both EVA crew back at base. If sample collection is unsafe or the target cannot be identified, return photographs and record the missing evidence. These are proposed science products, not completed observations.\n\nScope and crew\nThree Earth days already on the surface: preparation, field work, then sample triage and debrief. Interplanetary travel, landing, ascent and return to Earth are outside this file. The names and portraits are of real NASA astronauts. Their measurements, mission roles and assignments in this example are fictional. Jessica Meir leads geology and Victor Glover assists on EVA. Christina Koch operates communications from base. Frank Rubio provides medical oversight and sample receiving. This example chooses walking EVA; it does not settle the project's open mobility decision.\n\nCoordinates and evidence\nEvery coordinate is planetocentric latitude and east-positive longitude in degrees on the app's 3,396,190 m Mars sphere. Longitudes here lie in both the 0..360 and -180..180 conventions. The sites use selected points from the repository's historical Curiosity traverse, src/data/traverses/curiosity.json, path indices 0, 6, 15, 28 and 30. The local snapshot reports lastSol 5073 for the full traverse; it provides no per-point sol or coordinate error. Do not assign that sol to the selected early points or treat the snapshot as telemetry.\n\nBASE-DEMO is a fictional shelter near the Bradbury landing location. CHECKPOINT-DEMO, CONTACT-CANDIDATE, PANORAMA-CANDIDATE and SAMPLE-CANDIDATE are proposed stations, not surveyed outcrops or exact John Klein/Cumberland drill coordinates. Confirm their geology and access against registered imagery before sampling. S2 locates John Klein within Yellowknife Bay but does not validate these proposed coordinates. Marker precision is storage precision, not a claim of centimetre accuracy.\n\nTraverse and schedule\nProposed outbound order: BASE-DEMO -> CHECKPOINT-DEMO -> CONTACT-CANDIDATE -> PANORAMA-CANDIDATE -> SAMPLE-CANDIDATE. Return over the same stations in reverse. Connecting these coordinates on the sphere gives about 491 m outbound and 981 m round trip. These are straight station-to-station distances, not a terrain-approved path. The mission site's Review distance omits the reverse leg; use this explicit return plan. The map's interactive EVA route is separate from the site list and must be calculated before use.\n\nNo UTC start is approved. Times below are relative to T0, after habitat preparation. Set the Schedule start in the map and reassess the entire window. Earth hours and 24-hour Earth days are used throughout; they are not Martian sols.\nDay 1: medical and suit checks, map registration, sample kit preparation and a local abort rehearsal inside base.\nDay 2, T+00:00 to 00:30: egress and buddy checks at BASE-DEMO.\nT+00:30 to 01:00: outbound walk via CHECKPOINT-DEMO to CONTACT-CANDIDATE.\nT+01:00 to 01:30: document candidate contact, bedding and grain size.\nT+01:30 to 02:00: move to PANORAMA-CANDIDATE and acquire a context panorama with scale and orientation.\nT+02:00 to 03:00: move to SAMPLE-CANDIDATE, identify a suitable patch, collect paired host/fracture material if authorized, and document a blank. Moves among the science stations are included in these work blocks.\nT+03:00 to 03:30: return to BASE-DEMO via the same stations.\nT+03:30 to 04:00: ingress, dust control and sample handoff.\nChristina Koch and Frank Rubio each have a concurrent four-hour support task inside base. There are eight EVA crew-hours, four per walker, and no additional EVA on the other days. The phase's 28 hours per week over one day yields four hours per full-share person. Support crew have evaShare 0. Task hours are checked against that budget; tasks do not independently increase supplies.\nDay 3: image and sample inventory, preliminary comparison, equipment inspection and team debrief. This is preliminary triage, not a promise of laboratory mineral identification.\n\nSampling method\nPhotograph undisturbed targets before contact. Record station, sample ID, collection order, orientation and the relationship of veins to host rock. Use clean separate tools and containers, collect a handling blank, and avoid Curiosity drill holes, discarded fines and rover hardware. Seek access and contamination review before contact with heritage targets. Compare host, fracture and blank in the laboratory using mineralogical and chemical methods suited to the eventual payload. No instrument package, sample mass or detection limit is specified here; those remain equipment decisions.\n\nData to inspect together\nOptical: CTX V01 provides 5 m/pixel regional context. That cannot establish boot placement, loose-rock hazards or the identity of a narrow vein. NASA/JPL/MSSS/The Murray Lab credit and Esri service terms apply. [S5]\nTopographic: Mars Trek mars_v14 has spatially varying resolution. Inspect coverage, terrain detail and profile before choosing a path. Coarser than 20 m is a project caution threshold; it can hide dangerous local slopes. Terrain shading and exaggerated relief are not slope measurements. [S6]\nThermal: THEMIS provides regional thermal-inertia context. NASA's John Klein map combines this with topography and relates the Yellowknife Bay entrance to a thermal boundary. It cannot resolve these sample patches or prove safe footing. [S2]\nSurface optical and chemical context: the John Klein MAHLI observation was taken on sol 270, May 10, 2013. Its fracture and grain observations apply to that target, not every point in the proposed traverse. [S1]\nRadiation: RAD measured an average 0.67 mSv/day at Gale during August 2012 to June 2013. This is historical context, not the future crew's personal dose or a storm forecast. This example assigns no route dose or current GO status from it. [S3]\n\nAssumptions and resource model\nAll phases explicitly use stored supplies: waterRecovery 0 and oxygenRecovery 0. No Mars recycling performance is assumed. Hygiene water is 0.4 kg per person per Earth day. Crew power is the existing model's 1,080 W per person; basePowerW is an assumed additional 2,000 W for this exercise, not a measured habitat load. Equipment energy, thermal control, communications and rover propulsion are not validated by that assumption. The 40% supply margin is a project planning choice, not a NASA-mandated reserve.\n\nThe app computes baseline food from the crew profiles using its NASA-STD-3001 model. Revision F requires 200 kcal of additional food per EVA hour; this plan therefore adds 800 kcal per walker above their nominal intake on Day 2. [S4] The app also uses BVAD-based metabolic conversions, packaged food, suit oxygen losses and cooling-water losses. BVAD is a reference for early estimates; its lunar suit assumptions do not validate a Mars suit. [S7] Airlock gas, cabin leakage, nitrogen, spares, medical water and sample hardware are not included. Review the app's calculated provisions as scoped estimates, not a complete launch manifest.\n\nRelease and recovery\nStatus is HOLD pending a dated route assessment, local weather, space-weather coverage, communications verification, approved suit limits and a checked return reserve. No current environmental measurements are embedded. A forecast beyond its horizon is unknown. A missing terrain or weather sample is unknown; retry or defer rather than treat it as safe.\n\nThe four-hour timeline is a nominal allocation, not a certified suit endurance. Before departure, define usable oxygen, water, battery and CO2-removal limits from the selected suit and establish a return threshold from the assessed return time plus an explicit contingency allowance. The 40% mission supply margin does not set that suit threshold. If the return threshold is reached, abandon sampling and return. If the science stops run late, shorten science, not the return allocation. A new obstacle, symptoms, lost communications or an environmental alert triggers the locally rehearsed stop/return procedure. No orbital support with real-time Earth intervention is assumed.\n\nIf the local target proves wrong, keep its photographs and revise the candidate location. If imported coordinates or symbols disagree with registered imagery, stop placement and fix the file. Recompute the route after moving a station. The unsurveyed symbol marks a required inspection, not a measured hazard. Medical, relay and supply symbols are fictional facilities; they do not demonstrate rescue, coverage or replenishment capability.\n\nSources, checked 2026-11-15\n[S1] NASA/JPL-Caltech/MSSS, View into John Klein Drill Hole in Martian Mudstone, December 6, 2013. Curiosity MAHLI, sol 270; target-scale ground truth, not a spatial map.\nhttps://science.nasa.gov/resource/view-into-john-klein-drill-hole-in-martian-mudstone/\n[S2] NASA/JPL-Caltech/ASU, Location of John Klein Drill Site, March 12, 2013. Mars Odyssey THEMIS thermal inertia with topographic context; overview resolution is not given on the page.\nhttps://science.nasa.gov/resource/location-of-john-klein-drill-site/\n[S3] NASA/JPL, NASA Curiosity: First Mars Age Measurement and Human Exploration Help, December 9, 2013. Curiosity RAD, historical Gale surface average.\nhttps://www.jpl.nasa.gov/news/nasa-curiosity-first-mars-age-measurement-and-human-exploration-help/\n[S4] NASA-STD-3001 Volume 2 Revision F, approved July 14, 2026. Sections 6.3, 7.1 and 11.2; food addition at requirement V2 7004, printed page 116. A human-system standard, not a Mars EVA certification for this scenario.\nhttps://standards.nasa.gov/system/files/tmp/NASA-STD-3001%20Vol%202%20Rev%20F.pdf\n[S5] Caltech Murray Lab, Global CTX Mosaic V01. MRO Context Camera, 5 m/pixel. Free use with the stated NASA/JPL/MSSS/The Murray Lab credit; check host service terms separately.\nhttps://murray-lab.caltech.edu/CTX/\n[S6] NASA/JPL Mars Trek mars_v14 terrain metadata. Mixed MOLA, HRSC and local stereo terrain; coverage and resolution vary. Retain provider credits; metadata does not state a separate license.\nhttps://marshub.s3.amazonaws.com/mars_v14/layer.json\n[S7] Anderson, Ewert and Keener, Life Support Baseline Values and Assumptions Document, NASA/TP-2015-218570/REV1, January 2018. Tables 3-2, 3-33 and 4-75 are the app's resource references. NTRS lists public use permitted.\nhttps://ntrs.nasa.gov/citations/20180001338\n\nSource images remain external references and are not bundled. Read their credit lines and NASA media-use guidance before reuse. The repository's data/SOURCES.md describes optical and terrain caching. No live NASA data is fetched when this file is opened; map layers use their normal proxies.\n"
+}

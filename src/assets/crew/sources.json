@@ -1,0 +1,122 @@
+[
+  {
+    "file": "christina koch.svg",
+    "astronaut": "Christina Koch",
+    "credit": "NASA/Bill Stafford",
+    "nasaId": "jsc2018e095073_alt",
+    "source": "https://images.nasa.gov/details/jsc2018e095073_alt",
+    "download": "https://images-assets.nasa.gov/image/jsc2018e095073_alt/jsc2018e095073_alt~small.jpg",
+    "width": 511,
+    "height": 640,
+    "crop": [
+      180,
+      25,
+      240
+    ]
+  },
+  {
+    "file": "robert hines.svg",
+    "astronaut": "Robert Hines",
+    "credit": "NASA/Josh Valcarcel",
+    "nasaId": "jsc2021e018898_alt",
+    "source": "https://images.nasa.gov/details/jsc2021e018898_alt",
+    "download": "https://images-assets.nasa.gov/image/jsc2021e018898_alt/jsc2021e018898_alt~small.jpg",
+    "width": 426,
+    "height": 640,
+    "crop": [
+      130,
+      35,
+      240
+    ]
+  },
+  {
+    "file": "jessica meir.svg",
+    "astronaut": "Jessica Meir",
+    "credit": "NASA/Josh Valcarcel",
+    "nasaId": "jsc2025e078605_alt",
+    "source": "https://images.nasa.gov/details/jsc2025e078605_alt",
+    "download": "https://images-assets.nasa.gov/image/jsc2025e078605_alt/jsc2025e078605_alt~small.jpg",
+    "width": 511,
+    "height": 639,
+    "crop": [
+      130,
+      25,
+      270
+    ]
+  },
+  {
+    "file": "victor glover.svg",
+    "astronaut": "Victor Glover",
+    "credit": "NASA/Bill Ingalls",
+    "nasaId": "NHQ202009150002",
+    "source": "https://images.nasa.gov/details/NHQ202009150002",
+    "download": "https://images-assets.nasa.gov/image/NHQ202009150002/NHQ202009150002~small.jpg",
+    "width": 640,
+    "height": 399,
+    "crop": [
+      145,
+      0,
+      260
+    ]
+  },
+  {
+    "file": "kjell lindgren.svg",
+    "astronaut": "Kjell Lindgren",
+    "credit": "NASA/Josh Valcarcel",
+    "nasaId": "jsc2021e018841_alt",
+    "source": "https://images.nasa.gov/details/jsc2021e018841_alt",
+    "download": "https://images-assets.nasa.gov/image/jsc2021e018841_alt/jsc2021e018841_alt~small.jpg",
+    "width": 426,
+    "height": 640,
+    "crop": [
+      105,
+      35,
+      250
+    ]
+  },
+  {
+    "file": "jessica watkins.svg",
+    "astronaut": "Jessica Watkins",
+    "credit": "NASA/Bill Stafford",
+    "nasaId": "jsc2026e035015_alt",
+    "source": "https://images.nasa.gov/details/jsc2026e035015_alt",
+    "download": "https://images-assets.nasa.gov/image/jsc2026e035015_alt/jsc2026e035015_alt~medium.jpg",
+    "width": 960,
+    "height": 1280,
+    "crop": [
+      310,
+      65,
+      280
+    ]
+  },
+  {
+    "file": "frank rubio.svg",
+    "astronaut": "Frank Rubio",
+    "credit": "NASA/Bill Stafford",
+    "nasaId": "jsc2017e114795",
+    "source": "https://images.nasa.gov/details/jsc2017e114795",
+    "download": "https://images-assets.nasa.gov/image/jsc2017e114795/jsc2017e114795~small.jpg",
+    "width": 512,
+    "height": 640,
+    "crop": [
+      125,
+      30,
+      280
+    ]
+  },
+  {
+    "file": "kathleen rubins.svg",
+    "astronaut": "Kathleen Rubins",
+    "credit": "NASA/Robert Markowitz",
+    "nasaId": "jsc2010e008396",
+    "source": "https://images.nasa.gov/details/jsc2010e008396",
+    "download": "https://images-assets.nasa.gov/image/jsc2010e008396/jsc2010e008396~small.jpg",
+    "width": 512,
+    "height": 640,
+    "crop": [
+      130,
+      25,
+      280
+    ]
+  }
+]

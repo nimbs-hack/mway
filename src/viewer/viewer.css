@@ -1,0 +1,1023 @@
+/* The mission viewer. Tokens come from src/tokens.css, the look from
+   docs/visual-language.md. Nothing here loads the editor's stylesheets. */
+
+*,
+::before,
+::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: 1.4;
+}
+
+h2,
+h3,
+p,
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+ul {
+  list-style: none;
+}
+
+button,
+input,
+textarea {
+  border-radius: var(--radius);
+  color: inherit;
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+/* The map owns the screen. The sidebar is closed until requested. */
+#viewer {
+  position: relative;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.sidebar-toggle {
+  position: absolute;
+  z-index: 3;
+  top: var(--space-8);
+  left: var(--space-8);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  height: 44px;
+  background: var(--color-surface);
+}
+
+.sidebar-backdrop {
+  display: none;
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-3) 0 var(--space-4);
+  border-bottom: var(--border-width) solid var(--color-line);
+  background: var(--color-surface);
+}
+
+.bar__title {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.bar__title strong {
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  font-size: var(--text-heading);
+  font-weight: 700;
+  text-overflow: ellipsis;
+}
+
+.button {
+  flex: none;
+  height: var(--control-height);
+  padding: 0 var(--space-3);
+  border: var(--border-width) solid var(--color-line-strong);
+  background: var(--color-surface-raised);
+  font-size: var(--text-data);
+}
+
+.icon {
+  flex: none;
+  width: 18px;
+  height: 18px;
+}
+
+.button--icon {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* The action a view is there for, outlined in accent as in the editor. */
+.button--primary {
+  border-color: var(--color-accent);
+  background: var(--color-accent-shade);
+}
+
+.link {
+  padding: 0;
+  border: 0;
+  background: none;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* A name for a button whose face is a sign or a shortcut, shown at once on
+   hover or keyboard focus. Below the button, or left of it on the rail. */
+[data-tip] {
+  position: relative;
+}
+
+[data-tip]:is(:hover, :focus-visible)::after {
+  content: attr(data-tip);
+  position: absolute;
+  z-index: 5;
+  top: calc(100% + var(--space-1));
+  right: 0;
+  width: max-content;
+  max-width: 260px;
+  padding: var(--space-1) var(--space-2);
+  border: var(--border-width) solid var(--color-line-strong);
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-size: var(--text-data);
+  font-weight: 400;
+  line-height: 1.35;
+  text-align: left;
+  white-space: normal;
+  pointer-events: none;
+}
+
+.rail [data-tip]::after {
+  top: 50%;
+  right: calc(100% + var(--space-2));
+  translate: 0 -50%;
+}
+
+/* Messages. Each starts with a word saying what it is and offers what to do. */
+
+.alerts {
+  max-height: 30dvh;
+  overflow-y: auto;
+  font-size: var(--text-data);
+}
+
+.alerts p {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-1) var(--space-3);
+  padding: var(--space-2) var(--space-4);
+  border-bottom: var(--border-width) solid var(--color-line);
+  border-left: 3px solid var(--color-warning);
+  background: var(--color-surface);
+}
+
+.alerts b {
+  color: var(--color-warning);
+  font-size: var(--text-label);
+}
+
+/* The panel. */
+
+.panel {
+  position: absolute;
+  z-index: 4;
+  inset: 0 auto 0 0;
+  width: var(--sidebar-width);
+  display: grid;
+  grid-template-rows: var(--topbar-height) auto auto minmax(0, 1fr) auto;
+  border-right: var(--border-width) solid var(--color-line-strong);
+  background: var(--color-surface);
+  transform: translateX(-100%);
+  visibility: hidden;
+  transition:
+    transform 180ms ease-out,
+    visibility 180ms;
+}
+
+.sidebar-open .panel {
+  transform: translateX(0);
+  visibility: visible;
+}
+
+.panel__actions {
+  display: flex;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: var(--border-width) solid var(--color-line);
+}
+
+.panel__actions > :nth-child(2) {
+  margin-left: auto;
+}
+
+.panel__content {
+  display: flex;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* The editor's plan panel rail: icon over name, the open tab boxed with an
+   accent edge. */
+.tabs {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 80px;
+  gap: var(--space-1);
+  overflow-y: auto;
+  border-right: var(--border-width) solid var(--color-line);
+  padding: var(--space-3) var(--space-1);
+  background: var(--color-bg);
+}
+
+.tabs button {
+  position: relative;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 2px;
+  flex: none;
+  height: 52px;
+  padding: 0;
+  border: var(--border-width) solid transparent;
+  background: none;
+  color: var(--color-text-dim);
+  font-size: var(--text-min);
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.tabs button:hover {
+  color: var(--color-text);
+}
+.button:hover:not(:disabled) {
+  border-color: var(--color-text-muted);
+}
+.tabs button[aria-current] {
+  border-color: var(--color-line-strong);
+  background: var(--color-surface-raised);
+  color: var(--color-text);
+  border-left: 2px solid var(--color-accent);
+}
+/* A dot on a rail icon: something in the tab is near a limit. A triangle:
+   over one, so the two differ by shape as well as color. */
+.tabs__flag {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 6px;
+  height: 6px;
+  background: var(--color-caution);
+}
+.tabs__flag--hazard {
+  top: 4px;
+  right: 4px;
+  width: 9px;
+  height: 8px;
+  background: var(--color-hazard);
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}
+.cautions li::before {
+  content: '△\00a0';
+  color: var(--color-caution);
+}
+
+.panel__body {
+  flex: 1;
+  min-width: 0;
+  overflow-y: auto;
+  padding: var(--space-4);
+}
+
+.page {
+  display: grid;
+  gap: var(--space-6);
+  align-content: start;
+}
+
+.page__title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  font-size: var(--text-heading);
+  font-weight: 700;
+}
+
+/* Group headers, as the editor's: smaller and quieter than the tab title,
+   with a rule running out to the edge. */
+.page :is(h2, h3) {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: var(--space-3) 0 var(--space-1);
+  color: var(--color-text-muted);
+  font-size: var(--text-data);
+  font-weight: 600;
+}
+
+.page :is(h2, h3)::after {
+  content: '';
+  flex: 1;
+  height: var(--border-width);
+  background: var(--color-line);
+}
+
+.empty {
+  display: grid;
+  gap: var(--space-3);
+  justify-items: start;
+  color: var(--color-text-muted);
+}
+
+.note {
+  color: var(--color-text-muted);
+}
+
+.cautions {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.cautions li {
+  padding: var(--space-1) var(--space-3);
+  border-left: 3px solid var(--color-caution);
+}
+
+/* Rows: label on the left, value on the right. Only a value that can be
+   typed over sits in a box. */
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  min-height: var(--control-height);
+}
+
+.row__label {
+  color: var(--color-text-muted);
+}
+
+.row[title] .row__label {
+  text-decoration: underline dotted var(--color-text-dim);
+  text-underline-offset: 3px;
+}
+
+.row__value,
+.table,
+.readout__value,
+.status,
+.site__leg,
+.site__place {
+  font-variant-numeric: tabular-nums;
+}
+
+.row__value {
+  text-align: right;
+}
+
+.unit {
+  color: var(--color-text-dim);
+}
+
+.is-hazard {
+  color: var(--color-hazard);
+}
+
+.is-hazard::before {
+  content: '▲\00a0';
+}
+
+.is-caution {
+  color: var(--color-caution);
+}
+
+.is-caution::before {
+  content: '△\00a0';
+}
+
+
+
+.readouts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.readout {
+  display: grid;
+  gap: var(--space-1);
+  padding: var(--space-3) 0;
+  border-bottom: var(--border-width) solid var(--color-line);
+}
+
+.readout__label {
+  color: var(--color-text-dim);
+  font-size: var(--text-label);
+}
+
+.readout__value {
+  font-size: var(--text-section);
+  font-weight: 600;
+}
+
+.readout__value .unit {
+  font-size: var(--text-data);
+  font-weight: 400;
+}
+
+.readout__sub {
+  color: var(--color-text-muted);
+  font-size: var(--text-label);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-data);
+}
+
+.table :is(th, td) {
+  padding: var(--space-2) 0 var(--space-2) var(--space-4);
+  border-bottom: var(--border-width) solid var(--color-line);
+  font-weight: 400;
+  text-align: right;
+}
+
+.table :is(th, td):first-child {
+  padding-left: 0;
+  text-align: left;
+}
+
+.table thead th {
+  color: var(--color-text-dim);
+  font-size: var(--text-label);
+}
+
+/* Sites and their tasks. */
+
+.site__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.site__name {
+  padding: var(--space-1) var(--space-2);
+  margin-left: calc(-1 * var(--space-2));
+  border: 0;
+  background: none;
+  font-size: var(--text-heading);
+  font-weight: 600;
+  text-align: left;
+}
+
+.site__name[aria-pressed='true'] {
+  outline: 2px solid var(--color-accent);
+}
+
+.site__leg {
+  color: var(--color-text);
+  font-size: var(--text-data);
+}
+
+.site__place {
+  color: var(--color-text);
+  font-size: var(--text-label);
+}
+
+.site__info {
+  margin-top: var(--space-2);
+  color: var(--color-text-muted);
+  white-space: pre-line;
+}
+
+/* The plan: one line per stop, with the leg into it. */
+.stops {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.stop {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: var(--space-1) var(--space-3);
+}
+
+.stop .site__name {
+  font-size: var(--text-body);
+}
+
+.stop__role {
+  color: var(--color-text-dim);
+  font-size: var(--text-label);
+}
+
+.stop__tasks {
+  grid-column: 1 / -1;
+}
+
+.stop__tasks:empty {
+  display: none;
+}
+
+.stop .site__note {
+  grid-column: 1 / -1;
+  margin-top: 0;
+}
+
+.site__note {
+  margin-top: var(--space-1);
+  font-size: var(--text-data);
+}
+
+.task {
+  margin-top: var(--space-3);
+  padding: 0 var(--space-3) var(--space-1);
+  background: var(--color-surface-raised);
+}
+
+.task h3 {
+  margin: 0;
+  padding-top: var(--space-3);
+}
+
+.task .row:last-child,
+.person .row:last-child {
+  border-bottom: 0;
+}
+
+.check {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-data);
+}
+
+.check input {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--color-accent);
+}
+
+.symbols li {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+  border-bottom: var(--border-width) solid var(--color-line);
+}
+
+.symbols .link {
+  text-align: left;
+}
+
+/* Crew. */
+
+.person {
+  border-bottom: var(--border-width) solid var(--color-line);
+}
+
+.person summary {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  min-height: 44px;
+  padding: var(--space-3) 0;
+  cursor: pointer;
+  list-style: none;
+  font-variant-numeric: tabular-nums;
+}
+
+.person summary::-webkit-details-marker {
+  display: none;
+}
+
+.person__name {
+  font-weight: 600;
+}
+
+.person__role {
+  flex: 1;
+  color: var(--color-text-muted);
+  font-size: var(--text-data);
+}
+
+/* "Details" with a chevron in a box, as on the editor's crew tiles. The
+   chevron turns when the row is open. */
+.more-button {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: var(--space-2);
+  height: var(--control-height);
+  padding: 0 var(--space-3);
+  border: var(--border-width) solid var(--color-line-strong);
+  background: var(--color-surface-raised);
+  color: var(--color-text-muted);
+  font-size: var(--text-data);
+}
+summary:hover .more-button {
+  border-color: var(--color-text-muted);
+  color: var(--color-text);
+}
+details[open] > summary .more-button .icon {
+  rotate: 180deg;
+}
+
+/* The map: the ground, then what is drawn on it, then the controls. */
+
+.map {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  min-height: 0;
+  background: var(--color-bg);
+}
+
+.map canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.map__overlay {
+  cursor: grab;
+  outline-offset: -2px;
+  touch-action: none;
+}
+
+.sidebar-open .map {
+  left: var(--sidebar-width);
+  bottom: var(--viewer-status-height, var(--statusbar-height));
+}
+
+.map .map-labels { z-index: 1; }
+.rail { z-index: 2; overflow: visible; }
+
+.key {
+  flex-wrap: wrap;
+  position: absolute;
+  z-index: 1;
+  bottom: var(--space-8);
+  left: var(--space-8);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  max-width: calc(100% - 2 * var(--space-8));
+  padding: var(--space-1) var(--space-2);
+  border: var(--border-width) solid var(--color-line);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  font-size: var(--text-label);
+}
+
+.key__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.key__item:not([hidden]) + .key__item:not([hidden]) {
+  padding-left: var(--space-2);
+  border-left: var(--border-width) solid var(--color-line-strong);
+}
+
+/* The line as the map draws it: dashes of 6 on 5 on a dark band. */
+.key__line {
+  flex: none;
+  width: 28px;
+  height: 2.5px;
+  background: repeating-linear-gradient(90deg, var(--color-accent) 0 6px, var(--color-bg) 6px 11px);
+  box-shadow: 0 0 0 1.5px var(--color-bg);
+}
+
+/* A leg with no path under the limit: straight, in the over-limit color. */
+.key__line--blocked {
+  height: 3.5px;
+  background: repeating-linear-gradient(90deg, var(--color-hazard) 0 6px, var(--color-bg) 6px 11px);
+}
+
+.status {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: var(--sidebar-width);
+  display: none;
+  align-items: center;
+  gap: var(--space-4);
+  min-height: var(--statusbar-height);
+  padding: var(--space-1) var(--space-3);
+  border-top: var(--border-width) solid var(--color-line);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  font-size: var(--text-label);
+}
+
+.sidebar-open .status,
+.status.has-warning {
+  display: flex;
+}
+#viewer:not(.sidebar-open) .status.has-warning {
+  left: 0;
+  width: max-content;
+  max-width: 100%;
+}
+#viewer:not(.sidebar-open) .status :is(.status__scale, .status__cursor) {
+  display: none;
+}
+.status [role='status'] {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  color: var(--color-warning);
+}
+.status [role='status']:empty {
+  display: none;
+}
+.credits {
+  padding: var(--space-3) var(--space-4);
+  border-top: var(--border-width) solid var(--color-line);
+  font-size: var(--text-label);
+  color: var(--color-text-muted);
+}
+.credits summary,
+.more summary {
+  cursor: pointer;
+  width: fit-content;
+}
+.credits div {
+  padding-top: var(--space-2);
+  display: grid;
+  gap: var(--space-2);
+}
+.status__scale {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-left: auto;
+  color: var(--color-text);
+  white-space: nowrap;
+}
+.scale {
+  height: 6px;
+  border: var(--border-width) solid var(--color-text);
+  border-top: 0;
+}
+.status__cursor {
+  color: var(--color-text);
+  white-space: nowrap;
+}
+.more {
+  border-top: var(--border-width) solid var(--color-line);
+  padding-top: var(--space-3);
+  font-size: var(--text-data);
+}
+.more[open] summary {
+  margin-bottom: var(--space-3);
+}
+.briefing-text {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  line-height: 1.6;
+}
+.row__value {
+  overflow-wrap: anywhere;
+}
+select {
+  max-width: 65%;
+  min-height: var(--control-height);
+  padding: 0 var(--space-3);
+  border: var(--border-width) solid var(--color-line-strong);
+  border-radius: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font: inherit;
+  appearance: none;
+}
+.live-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+.team {
+  display: grid;
+}
+.team__person {
+  border-bottom: var(--border-width) solid var(--color-line);
+}
+/* As on the Crew tab, the whole line opens the person's readings. */
+.team__person summary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 44px;
+  padding: var(--space-3) 0;
+  cursor: pointer;
+  list-style: none;
+}
+.team__person summary::-webkit-details-marker {
+  display: none;
+}
+.team__person summary:hover {
+  background: var(--color-surface-raised);
+}
+.team__who {
+  flex: 1;
+  min-width: 0;
+}
+.team__who strong {
+  display: block;
+  font-size: var(--text-body);
+  font-weight: 600;
+}
+.team__line {
+  display: block;
+  margin-top: var(--space-1);
+  color: var(--color-text-muted);
+  font-size: var(--text-label);
+  font-variant-numeric: tabular-nums;
+}
+.team__body {
+  padding: 0 0 var(--space-4) calc(12px + var(--space-3));
+}
+.team__body .row__value {
+  font-variant-numeric: tabular-nums;
+}
+.team__position {
+  flex: 1;
+  text-align: right;
+}
+.team__portrait {
+  display: grid;
+  flex: none;
+  width: var(--control-height);
+  height: var(--control-height);
+  border: var(--border-width) solid var(--color-line-strong);
+}
+.team__portrait.is-selected { outline: 2px solid var(--color-accent); }
+.team__portrait > * { width: 100%; height: 100%; object-fit: cover; }
+
+@media (max-width: 860px) {
+  .panel {
+    width: min(var(--sidebar-width), calc(100% - var(--space-6)));
+  }
+  .sidebar-open .map {
+    left: 0;
+    bottom: 0;
+  }
+  .sidebar-open .sidebar-backdrop {
+    display: block;
+    position: absolute;
+    z-index: 3;
+    inset: 0;
+    width: 100%;
+    border: 0;
+    background: rgb(0 0 0 / 0.4);
+  }
+  .sidebar-open .status {
+    display: none;
+  }
+  .status.has-warning {
+    left: 0;
+  }
+  .bar {
+    padding-left: var(--space-3);
+  }
+  .bar__title strong {
+    font-size: var(--text-body);
+  }
+  .panel__actions {
+    padding: var(--space-2) var(--space-3);
+    gap: var(--space-1);
+  }
+  .panel__body {
+    padding: var(--space-3);
+  }
+  .row {
+    gap: var(--space-2);
+    font-size: var(--text-data);
+  }
+  .person summary {
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+  .site__head {
+    flex-wrap: wrap;
+  }
+  .table {
+    min-width: 320px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel {
+    transition: none;
+  }
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+/* A tile failure can wrap. Keep its recovery action clear of the map key. */
+#viewer:not(.sidebar-open) .key {
+  bottom: calc(var(--space-8) + var(--viewer-status-height, 0px));
+}
+
+.status {
+  flex-wrap: wrap;
+}
+
+/* Before a file is open, Mars turns in the middle of the screen. */
+.globe {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  justify-items: center;
+  gap: var(--space-6);
+  padding: calc(var(--space-8) * 2) var(--space-4) var(--space-8);
+  background: var(--color-bg);
+}
+
+.globe__sphere {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  /* The drawing is square. Contain keeps it round on a narrow screen. */
+  object-fit: contain;
+}
+
+/* Without the mosaic the globe is a plain disc. */
+.globe--missing .globe__sphere {
+  width: auto;
+  max-width: 100%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--color-surface-raised);
+}
+
+.globe__actions .empty {
+  justify-items: center;
+  text-align: center;
+}
+
+.globe__actions .button {
+  min-width: 220px;
+}
+
+/* Corner brackets frame the map, as in the editor. Controls sit inside them. */
+.map__corner {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border: 0 solid var(--color-text-dim);
+  pointer-events: none;
+}
+.map__corner--tl {
+  top: 14px;
+  left: 14px;
+  border-width: 1px 0 0 1px;
+}
+.map__corner--tr {
+  top: 14px;
+  right: 14px;
+  border-width: 1px 1px 0 0;
+}
+.map__corner--bl {
+  bottom: 14px;
+  left: 14px;
+  border-width: 0 0 1px 1px;
+}
+.map__corner--br {
+  right: 14px;
+  bottom: 14px;
+  border-width: 0 1px 1px 0;
+}

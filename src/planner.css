@@ -1,0 +1,1449 @@
+/* The mission pages. styles.css is loaded first and supplies the tokens, the
+   top bar, the map stage and the status bar. plan-panel.css supplies the
+   slicer look: cards, value boxes, the dock and its buttons. This file adds
+   the stage tabs, the page layouts and the form rows, in that same look. */
+
+/* Layout: top bar, messages, the stage's page, then the page's own footer. */
+
+.console--mission {
+  grid-template: auto auto minmax(0, 1fr) auto / minmax(0, 1fr);
+}
+
+/* The stage tabs start at the left edge, as a slicer's do. */
+.console--mission > .topbar {
+  min-height: var(--topbar-height);
+  padding-right: var(--space-3);
+  padding-left: 0;
+}
+
+input,
+select {
+  font: inherit;
+  color: inherit;
+  border-radius: var(--radius);
+}
+
+select,
+summary {
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* :where keeps this reset weaker than any class rule below it. */
+:where(.page, .sites, .review, .alerts) :where(h1, h2, h3, p, ul, ol, dl, dd) {
+  margin: 0;
+  padding: 0;
+}
+
+:where(.page, .sites, .review) :is(ul, ol) {
+  list-style: none;
+}
+
+/* Stage tabs. Each stage is a page and a tab, like the tabs of a slicer. The
+   current one is raised with an accent line under it and carries
+   aria-current, so colour is not the only cue. */
+
+.tabs {
+  display: flex;
+  align-self: stretch;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.tab {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-width: 128px;
+  padding: 0 var(--space-4);
+  border: 0;
+  border-right: var(--border-width) solid var(--color-line);
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: var(--color-text-muted);
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+}
+
+.tab:hover {
+  background: var(--color-surface-raised);
+  color: var(--color-text);
+}
+
+.tab[aria-current='page'] {
+  border-bottom-color: var(--color-accent);
+  background: var(--color-surface-raised);
+  color: var(--color-text);
+  font-weight: 700;
+}
+
+.tab:focus-visible {
+  outline-offset: -3px;
+}
+
+.tab__flag {
+  color: var(--color-warning);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  font-weight: 400;
+}
+
+/* Top bar actions, in the bar's own type. */
+
+.topbar__meta {
+  gap: var(--space-2);
+}
+
+.topbar__meta .topbar__item {
+  margin-right: var(--space-2);
+}
+
+.topbar__action {
+  height: var(--control-height);
+  padding: 0 var(--space-3);
+  border: var(--border-width) solid var(--color-line);
+  background: none;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+}
+
+.topbar__action:hover:not(:disabled) {
+  border-color: var(--color-line-strong);
+  color: var(--color-text);
+}
+
+/* A button that is only a mark: undo, redo, the mission menu's arrow. */
+.topbar__action--icon {
+  display: grid;
+  place-items: center;
+  width: var(--control-height);
+  padding: 0;
+}
+
+/* The open mission: its name, typed in place, and a button that drops its
+   type and margin under the bar. */
+
+.mission-menu {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-right: var(--space-2);
+}
+
+.mission-menu__name {
+  width: 24ch;
+  font-size: var(--text-data);
+}
+
+.mission-menu__panel {
+  position: absolute;
+  top: calc(100% + var(--space-2));
+  right: 0;
+  z-index: 10;
+  display: grid;
+  width: 360px;
+  max-width: calc(100vw - 2 * var(--space-4));
+  padding: var(--space-3) var(--space-4);
+  border: var(--border-width) solid var(--color-line-strong);
+  background: var(--color-surface);
+  font-size: var(--text-body);
+  white-space: normal;
+}
+
+/* The new mission dialog, over the dimmed page. */
+
+.dialog {
+  width: min(480px, 100% - 2 * var(--space-4));
+  padding: var(--space-4);
+  border: var(--border-width) solid var(--color-line-strong);
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+.dialog::backdrop {
+  background: rgb(5 7 9 / 0.72);
+}
+
+.dialog form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/* Messages, in one strip under the top bar on every page. Each starts with a
+   word saying what it is, and the ones that need action offer the action.
+   The warning colour means missing or inconsistent data. */
+
+.problem,
+.notice {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-1) var(--space-3);
+  padding: var(--space-2) var(--space-4);
+  border-left: 3px solid var(--color-warning);
+  background: var(--color-surface);
+}
+
+.alerts > * {
+  border-bottom: var(--border-width) solid var(--color-line);
+}
+
+.notice {
+  border-left-color: var(--color-line-strong);
+}
+
+.problem b,
+.notice b,
+.cautions b {
+  color: var(--color-warning);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+}
+
+.notice b {
+  color: var(--color-text-muted);
+}
+
+.problem button,
+.notice button {
+  padding: 0;
+  border: 0;
+  background: none;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* A page that is one column of cards: mission, crew and phases. */
+
+.page {
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-line-strong) transparent;
+}
+
+.page__column {
+  display: grid;
+  gap: var(--space-4);
+  width: min(720px, 100% - 2 * var(--space-4));
+  margin: 0 auto;
+  padding: var(--space-8) 0;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border: var(--border-width) solid var(--color-line);
+  background: var(--color-surface);
+}
+
+.card__title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-1);
+  font-size: var(--text-heading);
+  font-weight: 700;
+}
+
+/* What the mission holds, one line per stage. Each line opens its stage. */
+
+.contents button {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: 40px;
+  padding: 0;
+  border: 0;
+  border-top: var(--border-width) solid var(--color-line);
+  background: none;
+  color: var(--color-text-muted);
+  text-align: left;
+}
+
+.contents button:hover {
+  color: var(--color-text);
+}
+
+.contents output {
+  color: var(--color-text);
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Section headings inside a panel: a small bold title with a rule after it. */
+
+.planner__title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-body);
+  font-weight: 700;
+}
+
+.planner__title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--color-line);
+}
+
+/* Lists whose selected line opens an editor underneath. The line itself is
+   a nav button from styles.css, a little lower here. */
+
+.items {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.items .nav-button {
+  height: 48px;
+  font-size: var(--text-body);
+}
+
+.items .nav-button__arrow {
+  width: 48px;
+}
+
+/* A row that can be dragged has a grip to the left of its button. */
+.item {
+  position: relative;
+}
+
+.item__line {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.item__line .nav-button {
+  flex: 1;
+  width: auto;
+  min-width: 0;
+}
+
+.item__grip {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: var(--space-6);
+  border: var(--border-width) solid var(--color-line);
+  background: var(--color-surface-raised);
+  color: var(--color-text-dim);
+  cursor: grab;
+  user-select: none;
+}
+
+.item__grip:hover {
+  border-color: var(--color-line-strong);
+  color: var(--color-text);
+}
+
+/* Six dots, the usual mark for something you can drag. */
+.item__grip svg {
+  width: 10px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.item.is-dragged {
+  opacity: 0.4;
+}
+
+/* Where the dragged row will land: a line in the gap above or below. */
+.item.is-drop-above::before,
+.item.is-drop-below::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  left: 0;
+  height: 2px;
+  background: var(--color-text);
+}
+
+.item.is-drop-above::before {
+  top: calc(var(--space-2) / -2 - 1px);
+}
+
+.item.is-drop-below::after {
+  bottom: calc(var(--space-2) / -2 - 1px);
+}
+
+.item__body {
+  display: grid;
+  gap: var(--space-2);
+  margin-top: var(--space-1);
+  padding: var(--space-4);
+  border: var(--border-width) solid var(--color-line-strong);
+}
+
+/* Small buttons: a short word in a box, like the buttons inside the plan
+   panel's value boxes. */
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--control-height);
+  padding: 0 var(--space-3);
+  border: var(--border-width) solid var(--color-line-strong);
+  background: var(--color-surface-raised);
+  color: var(--color-text);
+  font-size: var(--text-data);
+}
+
+.button:hover:not(:disabled) {
+  border-color: var(--color-text-muted);
+}
+
+.button[aria-pressed='true'] {
+  border-color: var(--color-accent);
+  background: var(--color-accent-shade);
+}
+
+/* The action a dialog or a list row is there for. */
+.button--primary {
+  border-color: var(--color-accent);
+  background: var(--color-accent-shade);
+}
+
+.button--quiet {
+  border-color: transparent;
+  background: none;
+  color: var(--color-text-muted);
+}
+
+.button--quiet:hover:not(:disabled) {
+  border-color: var(--color-line-strong);
+  color: var(--color-text);
+}
+
+/* Controls that take something away have a dashed edge and say what they
+   remove. An armed one, waiting for its second press, turns to the warning
+   colour and changes its word. */
+.button--remove {
+  border-style: dashed;
+}
+
+.button.is-armed {
+  border-style: dashed;
+  border-color: var(--color-warning);
+  color: var(--color-warning);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.actions .button {
+  flex: 1 1 auto;
+}
+
+/* A link that looks like the buttons beside it. */
+a.button {
+  text-decoration: none;
+}
+
+/* Form rows: the label on the left and its value box on the right, as in the
+   plan panel. */
+
+.label {
+  overflow: hidden;
+  color: var(--color-text-muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.note {
+  color: var(--color-text-dim);
+  font-size: var(--text-data);
+}
+
+.field,
+.slider__head {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+  min-height: 40px;
+}
+
+.fields {
+  display: grid;
+  min-width: 0;
+}
+
+.input,
+.slider__value {
+  width: 100%;
+  height: var(--control-height);
+  /* As far in from the sides as the text is from the top and bottom. */
+  padding: 0 var(--space-3);
+  border: var(--border-width) solid var(--color-line-strong);
+  background: var(--color-bg);
+}
+
+/* Plan tab: pick the next stop's site, then add it. */
+.plan-add {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+.plan-add .field {
+  margin: 0;
+}
+
+.input--lines {
+  height: auto;
+  padding: var(--space-2) var(--space-3);
+  color: inherit;
+  font: inherit;
+  line-height: 1.4;
+  resize: vertical;
+}
+
+.input::placeholder {
+  color: var(--color-text-dim);
+}
+
+.input:hover,
+.input:focus-within,
+.slider__value:focus-within {
+  border-color: var(--color-text-muted);
+}
+
+.input--number,
+.slider__value {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-text-dim);
+  font-size: var(--text-label);
+}
+
+.input--number input,
+.slider__value input {
+  flex: 1;
+  width: 0;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-text);
+  font-size: var(--text-body);
+  /* Digits keep their columns as a value changes. Set where numbers are,
+     not on body: Inter's tabular figures also widen hyphens in words. */
+  font-variant-numeric: tabular-nums;
+  outline: none;
+}
+
+input[type='number'] {
+  appearance: textfield;
+}
+
+input[type='number']::-webkit-inner-spin-button {
+  appearance: none;
+}
+
+select.input {
+  appearance: none;
+  padding-right: var(--space-8);
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--color-text-muted) 50%),
+    linear-gradient(135deg, var(--color-text-muted) 50%, transparent 50%);
+  background-position:
+    right 19px center,
+    right 14px center;
+  background-size: 5px 5px;
+  background-repeat: no-repeat;
+  text-overflow: ellipsis;
+}
+
+.segmented {
+  display: flex;
+  height: var(--control-height);
+}
+
+.segmented button {
+  flex: 1;
+  padding: 0 var(--space-2);
+  border: var(--border-width) solid var(--color-line-strong);
+  background: var(--color-bg);
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+}
+
+.segmented button + button {
+  border-left: 0;
+}
+
+/* The chosen option is inverted: light on dark becomes dark on light. */
+.segmented button[aria-pressed='true'] {
+  background: var(--color-text);
+  color: var(--color-bg);
+}
+
+/* A slider is a row with a thin track under it. */
+
+/* The typed value leads. The track is a quieter shortcut under it, with
+   room above so a drag does not land on the preset link. */
+.slider {
+  display: grid;
+  gap: var(--space-2);
+  padding-bottom: var(--space-3);
+}
+
+.slider .label {
+  white-space: normal;
+}
+
+.slider input[type='range'] {
+  width: 100%;
+  height: 16px;
+  margin: 0;
+  background: none;
+  appearance: none;
+  cursor: pointer;
+}
+
+.slider input[type='range']::-webkit-slider-runnable-track {
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-text-muted) var(--fill), var(--color-line-strong) var(--fill));
+}
+
+.slider input[type='range']::-moz-range-track {
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-text-muted) var(--fill), var(--color-line-strong) var(--fill));
+}
+
+.slider input[type='range']::-webkit-slider-thumb {
+  width: 10px;
+  height: 10px;
+  margin-top: -4px;
+  border: 0;
+  border-radius: var(--radius);
+  background: var(--color-text);
+  appearance: none;
+}
+
+.slider input[type='range']::-moz-range-thumb {
+  width: 10px;
+  height: 10px;
+  border: 0;
+  border-radius: var(--radius);
+  background: var(--color-text);
+}
+
+/* A parameter that differs from the phase preset takes the modified colour
+   and offers the way back, as changed limits do in the plan panel. */
+.preset {
+  display: block;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-modified);
+  font-size: var(--text-data);
+  text-align: left;
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+  margin-top: var(--space-1);
+}
+
+.slider:has(.preset) .slider__value {
+  border-color: var(--color-modified);
+}
+
+.slider:has(.preset) .slider__value input {
+  color: var(--color-modified);
+}
+
+/* The crew list: one line per person, with a button that opens their
+   information and one that selects them. People who are going on the mission
+   are outlined in the accent colour, which is the colour of a selection. */
+
+.card__add {
+  margin-left: auto;
+  font-weight: 400;
+}
+
+.people {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.person__line {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2);
+  border: var(--border-width) solid var(--color-line);
+  background: var(--color-surface-raised);
+}
+
+.person.is-selected .person__line {
+  border-color: var(--color-accent);
+}
+
+.person__name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* A name with a line of detail under it, as on the home page. */
+.person__who {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+}
+
+.person__meta {
+  overflow: hidden;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* A mission file on the home page: the whole line is one button that opens
+   what the mission holds. */
+
+.file {
+  width: 100%;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+}
+
+.file:hover {
+  border-color: var(--color-line-strong);
+}
+
+.file .person__who {
+  gap: var(--space-1);
+  margin-left: var(--space-2);
+}
+
+.file > .plan__icon {
+  margin: 0 var(--space-2);
+  color: var(--color-text-muted);
+}
+
+/* The mission's sites on the map: tiles laid side by side under a drawing
+   of the lines between them. Sized in RouteThumb.tsx. */
+
+.thumb {
+  position: relative;
+  flex: none;
+  width: 160px;
+  height: 96px;
+  overflow: hidden;
+  border: var(--border-width) solid var(--color-line-strong);
+  background: var(--color-bg);
+}
+
+.thumb--none {
+  display: grid;
+  place-items: center;
+  color: var(--color-text-dim);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+}
+
+.thumb img {
+  position: absolute;
+  max-width: none;
+}
+
+.thumb svg {
+  position: absolute;
+  inset: 0;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* The plan line of the map, at this size: accent on a dark halo. */
+.thumb__halo {
+  stroke: var(--color-bg);
+  stroke-width: 4.5;
+  stroke-opacity: 0.72;
+}
+
+.thumb__line {
+  stroke: var(--color-accent);
+  stroke-width: 2;
+}
+
+.thumb__start,
+.thumb__target,
+.thumb__point {
+  fill: var(--color-bg);
+  stroke: var(--color-text);
+  stroke-width: 1.5;
+}
+
+.thumb__start {
+  stroke: var(--color-accent);
+}
+
+.thumb__target {
+  stroke: var(--color-ok);
+}
+
+/* The crew as tiles: a portrait and call sign that pick the person, with a
+   check box in the corner, then the button that opens their information. */
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  /* A tile after an open one's information fills the row beside it. */
+  grid-auto-flow: dense;
+  gap: var(--space-2);
+}
+
+.tile {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+  padding: var(--space-2);
+  border: var(--border-width) solid var(--color-line);
+  background: var(--color-surface-raised);
+}
+
+/* Two pixels, so a picked tile reads at a glance. The tile keeps its size:
+   the inset shadow adds the second pixel inside the border. */
+.tile.is-selected {
+  border-color: var(--color-accent);
+  box-shadow: inset 0 0 0 1px var(--color-accent);
+}
+
+.tile__pick {
+  position: relative;
+  display: grid;
+  gap: var(--space-2);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  text-align: left;
+}
+
+.tile__pick[aria-disabled='true'] {
+  cursor: default;
+}
+
+/* An empty box until the person is picked, then filled with a tick. */
+.tile__check {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-2);
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--color-text);
+  background: rgb(5 7 9 / 0.6);
+}
+
+.tile.is-selected .tile__check {
+  border-color: var(--color-accent);
+  background: var(--color-accent);
+}
+
+.tile__check .plan__icon {
+  width: 16px;
+  height: 16px;
+  stroke: var(--color-text);
+  stroke-width: 3;
+}
+
+.tile__pick:hover .tile__check {
+  border-color: var(--color-accent);
+}
+
+.tile__more {
+  justify-content: space-between;
+  border-color: var(--color-line);
+}
+
+.tile__details {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+
+/* A row whose value is a few buttons, as the photo row is. */
+.field__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.field__buttons .button {
+  flex: 1 1 auto;
+}
+
+.note button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-text-muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* A map page that stays mounted while another stage is shown. It adds no box
+   of its own, so its children sit in the console's grid as before. */
+.keep {
+  display: contents;
+}
+
+.keep[hidden] {
+  display: none;
+}
+
+/* Work in progress: a ring that turns. The one round shape in the app, so
+   it reads as "busy" and nothing else. Without motion it stays a ring and
+   the words beside it carry the message. */
+.spinner {
+  display: inline-block;
+  flex: none;
+  width: 12px;
+  height: 12px;
+  margin-right: var(--space-2);
+  border: 2px solid var(--color-line-strong);
+  border-top-color: var(--color-text);
+  border-radius: 50%;
+  vertical-align: -1px;
+  animation: spin 0.8s linear infinite;
+}
+
+.spinner--large {
+  width: 28px;
+  height: 28px;
+  margin: 0;
+  border-width: 3px;
+}
+
+@keyframes spin {
+  to {
+    rotate: 360deg;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation: none;
+  }
+}
+
+/* A spinner over its words, centred: the planner starting, the map's code
+   on its way, the first tiles of the planet. */
+.loading,
+.stage__loading {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-3);
+  margin: 0;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+}
+
+.stage--loading {
+  display: grid;
+  place-content: center;
+}
+
+.stage__loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+}
+
+/* The route is being worked out: said on the map, top centre, and in the
+   panel's dock. */
+.stage__routing {
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+  border: var(--border-width) solid var(--color-line-strong);
+  background: var(--color-surface);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  translate: -50% 0;
+}
+
+.plan__verdict.is-routing {
+  align-items: center;
+  border-color: var(--color-text-muted);
+  color: var(--color-text);
+}
+
+.plan__verdict.is-routing .spinner {
+  margin-right: 0;
+}
+
+/* Crew portraits: a photo from src/assets/crew, or two letters in a frame. */
+
+.portrait {
+  width: 100%;
+  aspect-ratio: 1;
+  border: var(--border-width) solid var(--color-line-strong);
+  background: var(--color-bg);
+  object-fit: cover;
+}
+
+.portrait--none {
+  display: grid;
+  place-items: center;
+  color: var(--color-text-dim);
+  font-family: var(--font-mono);
+  font-size: var(--text-readout);
+  font-weight: 400;
+}
+
+/* Details, fact lists, tasks */
+
+.details summary {
+  color: var(--color-text-muted);
+  text-decoration: underline dotted var(--color-text-dim);
+  text-underline-offset: 3px;
+}
+
+.details[open] summary {
+  margin-bottom: var(--space-2);
+}
+
+/* Name on the left, value with its unit on the right. */
+.facts {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.facts dt,
+.facts dd {
+  padding: 6px 0;
+  border-bottom: var(--border-width) solid var(--color-line);
+}
+
+.facts dt {
+  color: var(--color-text-muted);
+}
+
+.facts dd {
+  padding-left: var(--space-4);
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* One crew member on the review page. Closed, it is a row: name and kcal. */
+.crew-needs {
+  border-bottom: var(--border-width) solid var(--color-line);
+}
+
+.crew-needs summary {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  padding: 6px 0;
+  list-style: none;
+}
+
+.crew-needs summary::-webkit-details-marker {
+  display: none;
+}
+
+.crew-needs summary::before {
+  content: '+';
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+}
+
+.crew-needs[open] summary::before {
+  content: '-';
+}
+
+.crew-needs__name {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.crew-needs__meta {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.crew-needs__body {
+  display: grid;
+  gap: var(--space-4);
+  padding: var(--space-2) 0 var(--space-4) var(--space-4);
+}
+
+.crew-needs__body > div {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.tasks {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.tasks:empty {
+  display: none;
+}
+
+.task {
+  display: grid;
+  padding: var(--space-2) var(--space-3) var(--space-3);
+  border: var(--border-width) solid var(--color-line);
+}
+
+.task > .label {
+  color: var(--color-text);
+  font-weight: 700;
+}
+
+/* Cautions on the review page: a caution-coloured edge, as on the verdict. */
+
+.cautions {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.cautions li {
+  display: grid;
+  gap: 2px;
+  padding: var(--space-1) var(--space-3);
+  border-left: 3px solid var(--color-warning);
+}
+
+/* Figures: the map's readout type, laid out in the flow of the page. */
+
+.figure {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.review__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.review__grid .readout__value {
+  font-size: var(--text-section);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.table th,
+.table td {
+  padding: 6px 0 6px var(--space-3);
+  border-bottom: var(--border-width) solid var(--color-line);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.table thead th {
+  color: var(--color-text-muted);
+  font-size: var(--text-data);
+  font-weight: 600;
+}
+
+.table th:first-child {
+  padding-left: 0;
+  text-align: left;
+}
+
+.table tbody th {
+  font-family: var(--font-sans);
+  font-weight: 400;
+}
+
+.table tfoot :is(th, td) {
+  border-bottom: 0;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-weight: 400;
+}
+
+/* A row that selects something on the map: a plain underlined name, with a
+   check mark when it is the one selected. */
+.table tbody th button {
+  padding: 0;
+  border: 0;
+  background: none;
+  text-decoration: underline dotted var(--color-text-dim);
+  text-underline-offset: 3px;
+}
+
+.table tbody th button[aria-pressed='true']::before {
+  content: '✓ ';
+}
+
+/* Numbers from the last valid mission are struck through as well as dimmed. */
+.review.is-stale :is(.readout__value, .facts dd, .table td, .crew-needs__meta) {
+  color: var(--color-text-muted);
+  text-decoration: line-through;
+}
+
+/* The mission's sites and tasks, as a tab of the plan panel on the sites page. */
+
+.sites {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-top: var(--space-3);
+}
+
+.sites section {
+  display: grid;
+  gap: var(--space-2);
+}
+
+/* The review page: the numbers on the left, the mission's sites on Mars
+   beside them. */
+
+.workspace--review {
+  grid-template-columns: min(var(--sidebar-width), 36vw) minmax(0, 1fr);
+}
+
+.review {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border-right: var(--border-width) solid var(--color-line);
+  background: var(--color-surface);
+}
+
+.review .step {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-height: 0;
+  padding: var(--space-4);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-line-strong) transparent;
+}
+
+.review .step > * {
+  flex: none;
+}
+
+.review .step section {
+  display: grid;
+  gap: var(--space-3);
+}
+
+/* Narrow screens: one column, the map under the panel. */
+
+@media (max-width: 900px) {
+  .console--mission > .topbar {
+    flex-wrap: wrap;
+    padding-block: var(--space-2);
+    white-space: normal;
+  }
+
+  .tabs {
+    order: 3;
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .tab {
+    min-width: 0;
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .topbar__meta {
+    flex-wrap: wrap;
+  }
+
+  /* The bar has wrapped, so the menu sits at the left and opens rightwards. */
+  .mission-menu__panel {
+    right: auto;
+    left: 0;
+  }
+
+  .workspace--review {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .review {
+    border-right: 0;
+    border-bottom: var(--border-width) solid var(--color-line);
+  }
+
+}
+
+/* Shown in place of the pages while the planner service is being reached. */
+.startup {
+  grid-row: 3;
+  display: grid;
+  place-content: center;
+  max-width: 60ch;
+  margin-inline: auto;
+  padding: var(--space-8);
+  color: var(--color-text-muted);
+}
+
+/* Mission dose over the career limit. */
+.crew-needs .is-hazard { color: var(--color-hazard); }
+
+/* The first-mission tour. The page stays live, since the user does each
+   step. The ring sits on the control's own edge in the selection colour,
+   two pixels like a picked tile, and its shadow dims the rest of the page
+   as the dialog backdrop does. Clicks pass through both. The card is built
+   like the New mission dialog: the same surface, border, padding, title
+   and full-width actions. */
+
+.tutorial__dim,
+.tutorial__spot {
+  position: fixed;
+  z-index: 2999;
+  pointer-events: none;
+}
+
+.tutorial__dim {
+  inset: 0;
+  background: rgb(5 7 9 / 0.72);
+}
+
+.tutorial__spot {
+  box-shadow:
+    inset 0 0 0 2px var(--color-accent),
+    0 0 0 100vmax rgb(5 7 9 / 0.72);
+}
+
+.tutorial {
+  position: fixed;
+  z-index: 3000;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  width: min(360px, 100vw - 2 * var(--space-4));
+  max-height: calc(100dvh - 2 * var(--space-4));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--space-4);
+  border: var(--border-width) solid var(--color-line-strong);
+  background: var(--color-surface);
+  color: var(--color-text);
+  animation: tutorial-in 120ms ease-out;
+}
+
+/* Each step's card fades in where it belongs. It never slides there, since
+   a moving card read as the outline dropping into place. */
+@keyframes tutorial-in {
+  from {
+    opacity: 0;
+  }
+}
+
+.tutorial__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  font-size: var(--text-label);
+}
+
+.tutorial__count {
+  color: var(--color-text-dim);
+  font-variant-numeric: tabular-nums;
+}
+
+/* A word, not a box, so it lines up with the text under it. */
+.tutorial__skip {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-text-muted);
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.tutorial__skip:hover {
+  color: var(--color-text);
+}
+
+.tutorial .card__title {
+  margin: 0;
+}
+
+.tutorial .actions .button {
+  flex: 1 1 0;
+}
+
+.tutorial__text {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: var(--text-body);
+  line-height: 1.45;
+}
+
+.topbar__action.tutorial-button {
+  flex: none;
+  font-family: var(--font-sans);
+  font-size: var(--text-data);
+}
+
+/* With no mission open there is nothing else on the right of the bar. */
+.tutorial-button--end {
+  margin-left: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tutorial {
+    animation: none;
+  }
+}

@@ -1,0 +1,16 @@
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
+.DS_Store
+
+# Raw and processed datasets. See AGENTS.md.
+/data/*
+!/data/SOURCES.md
+
+# Compiled Go API.
+/bin/
+
+# Local screenshots and generated artifacts.
+/output/

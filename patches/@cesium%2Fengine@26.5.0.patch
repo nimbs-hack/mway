@@ -1,0 +1,80 @@
+diff --git a/Source/Renderer/ShaderProgram.js b/Source/Renderer/ShaderProgram.js
+index 22feddd344c0eca3089ad48a210eb736f7b1f0d6..57bfc22dd6fdae92ac19be4dff4a0cf26f696abf 100644
+--- a/Source/Renderer/ShaderProgram.js
++++ b/Source/Renderer/ShaderProgram.js
+@@ -39,6 +39,7 @@ function ShaderProgram(options) {
+   this._attributeLocations = options.attributeLocations;
+ 
+   this._program = undefined;
++  this._pendingLink = undefined;
+   this._numberOfVertexAttributes = undefined;
+   this._vertexAttributes = undefined;
+   this._uniformsByName = undefined;
+@@ -183,7 +184,7 @@ function handleUniformPrecisionMismatches(
+ 
+ const consolePrefix = "[Cesium WebGL] ";
+ 
+-function createAndLinkProgram(gl, shader) {
++function startLink(gl, shader) {
+   const vsSource = shader._vertexShaderText;
+   const fsSource = shader._fragmentShaderText;
+ 
+@@ -213,6 +214,15 @@ function createAndLinkProgram(gl, shader) {
+   }
+ 
+   gl.linkProgram(program);
++  return { program, vertexShader, fragmentShader };
++}
++
++function createAndLinkProgram(gl, shader) {
++  const { program, vertexShader, fragmentShader } =
++    shader._pendingLink ?? startLink(gl, shader);
++  shader._pendingLink = undefined;
++  const vsSource = shader._vertexShaderText;
++  const fsSource = shader._fragmentShaderText;
+   let log;
+ 
+   // For performance: if linker succeeds, return without checking compile status
+@@ -540,6 +550,29 @@ function reinitialize(shader) {
+   }
+ }
+ 
++const parallelCompileExtensions = new WeakMap();
++
++// Start linking without waiting for the driver. The next bind finishes
++// initialization using this same program once compilation has completed.
++ShaderProgram.prototype._isReady = function () {
++  if (defined(this._program)) {
++    return true;
++  }
++  const gl = this._gl;
++  if (!parallelCompileExtensions.has(gl)) {
++    parallelCompileExtensions.set(gl, gl.getExtension("KHR_parallel_shader_compile"));
++  }
++  const extension = parallelCompileExtensions.get(gl);
++  if (!extension) {
++    return true;
++  }
++  this._pendingLink ??= startLink(gl, this);
++  return gl.getProgramParameter(
++    this._pendingLink.program,
++    extension.COMPLETION_STATUS_KHR,
++  );
++};
++
+ ShaderProgram.prototype._bind = function () {
+   initialize(this);
+   this._gl.useProgram(this._program);
+@@ -615,6 +648,12 @@ ShaderProgram.prototype.destroy = function () {
+ };
+ 
+ ShaderProgram.prototype.finalDestroy = function () {
++  if (this._pendingLink) {
++    this._gl.deleteShader(this._pendingLink.vertexShader);
++    this._gl.deleteShader(this._pendingLink.fragmentShader);
++    this._gl.deleteProgram(this._pendingLink.program);
++    this._pendingLink = undefined;
++  }
+   this._gl.deleteProgram(this._program);
+   return destroyObject(this);
+ };
